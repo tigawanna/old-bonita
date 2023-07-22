@@ -1,0 +1,50 @@
+{
+  "name": "bonita",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "shadcn/ui instalabble components",
+  "author": {
+    "name": "tigawanna"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tigawanna/bonita"
+  },
+  "engines": {
+    "node": ">=17.x",
+    "npm": ">=8.x <9"
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "bonita": "./dist/index.cjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "release": "release-it"
+  },
+  "keywords": [
+    "bonita",
+    "cli",
+    "typescript",
+    "web dev"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "glob": "^7.2.3",
+    "path": "^0.12.7",
+    "release-it": "^15.11.0",
+    "tsup": "^6.7.0",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "glob": "^7.2.3",
+    "path": "^0.12.7"
+  }
+}
