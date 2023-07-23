@@ -31,3 +31,8 @@ const [res, err] = await tryCatchWrapper(async () => await writeFile(path, conte
     if (err) throw err;
     return res
 }
+
+
+export function fileExists(path:string) {
+    return existsSync(path)
+}

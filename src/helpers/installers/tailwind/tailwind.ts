@@ -1,5 +1,5 @@
 import { installTWOnViteReact } from "./react/vite-react.ts";
-import { print, filesystem, strings, prompt, http, system } from "gluegun"
+import { print} from "gluegun-toolbox"
 const tailwind_installers_map = {
     "react":installTWOnViteReact ,
 }
