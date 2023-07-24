@@ -1,6 +1,6 @@
 import { installTailwind } from "@/helpers/installers/tailwind/tailwind.ts";
 import { Command } from "commander";
-import { print } from "gluegun-toolbox";
+import { checkFramework,print } from "gluegun-toolbox";
 import { z } from "zod";
 const program = new Command();
 const addArgsShema = z.array(z.enum(["tailwind", "panda"])).default(["tailwind", "panda"])
@@ -13,9 +13,10 @@ export const addCommand = program
   .argument("[inputs...]", "string to split")
   .action(async (args) => {
     const parsed_args = addArgsShema.parse(args);
+    const fremwork = await checkFramework()
     const pkg_installs = parsed_args.map((input) => {
       if (input === "tailwind") {
-        return installTailwind("react");
+        return installTailwind("React+Vite");
       } else {
         return Promise.resolve(); // or handle the case for other inputs
       }
