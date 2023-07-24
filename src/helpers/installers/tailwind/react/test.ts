@@ -1,3 +1,0 @@
-const boomer ={
-    "okey":"boomer"
-}

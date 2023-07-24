@@ -1,5 +1,6 @@
 import { installTailwind } from "@/helpers/installers/tailwind/tailwind.ts";
 import { Command } from "commander";
+import { print } from "gluegun-toolbox";
 import { z } from "zod";
 const program = new Command();
 const addArgsShema = z.array(z.enum(["tailwind", "panda"])).default(["tailwind", "panda"])
@@ -22,9 +23,9 @@ export const addCommand = program
 
     Promise.all(pkg_installs)
       .then(() => {
-        console.log("All packages installed successfully.");
+        console.log(print.checkmark);
       })
       .catch((error) => {
-        console.error("Failed to install packages:", error);
+        console.error(print.error("Failed to install packages:"), error.message);
       });
   });

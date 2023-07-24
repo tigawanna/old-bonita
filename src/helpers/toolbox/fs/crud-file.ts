@@ -26,7 +26,7 @@ type WriteFileOptionsType = Parameters<typeof writeFile>["2"]
  * @param {WriteFileOptionsType} [options] - The options for writing the file.
  * @return {Promise<any>} A promise that resolves with the result of the write operation.
  */
-export async function writeFileAsync(path: PathFileType, content: InputFileType, options?: WriteFileOptionsType) {
+export async function writeFileAsync(path: PathFileType, content: InputFileType, _?: WriteFileOptionsType) {
 const [res, err] = await tryCatchWrapper(async () => await writeFile(path, content,{ encoding: "utf-8" }));
     if (err) throw err;
     return res

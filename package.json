@@ -2,7 +2,7 @@
   "name": "bonita",
   "version": "0.0.1",
   "type": "module",
-  "description": "shadcn/ui instalabble components",
+  "description": "cli tools for frontend projects",
   "author": {
     "name": "tigawanna"
   },
@@ -14,10 +14,10 @@
     "node": ">=17.x",
     "npm": ">=8.x <9"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "bonita": "./dist/index.cjs"
+    "bonita": "./dist/index.js"
   },
   "files": [
     "dist"

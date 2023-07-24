@@ -4,7 +4,7 @@ const AddArgsSchema = z.object({
     options:z.any().optional()
 });
 type AddArgs = z.infer<typeof AddArgsSchema>; 
-export async function parse_add_args({inputs}:AddArgs) {
+export async function parse_add_args({}:AddArgs) {
  try {
     
  } catch (error) {
