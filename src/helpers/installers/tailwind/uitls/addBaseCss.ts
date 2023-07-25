@@ -1,7 +1,5 @@
-import { tryCatchWrapper } from "@/helpers/toolbox/async/try-catch.ts";
-import { readFileAsync, writeFileAsync } from "@/helpers/toolbox/fs/crud-file.ts";
-import { tailwind_base_css } from "./tailwind-config-template.ts";
-
+import { tailwind_base_css } from "@/commands/add/utils/consts";
+import { tryCatchWrapper, readFileAsync, writeFileAsync } from "gluegun-toolbox";
 
 export async function addBaseTWcss(inde_styles_path:string){
     tryCatchWrapper(

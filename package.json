@@ -54,6 +54,7 @@
     "gluegun-toolbox": "link:C:/Users/denni/Desktop/code/npm/gluegun-toolbox",
     "magicast": "^0.2.9",
     "path": "^0.12.7",
+    "valibot": "0.2.0",
     "zod": "^3.21.4"
   },
   "pnpm": {

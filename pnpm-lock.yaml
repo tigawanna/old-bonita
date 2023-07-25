@@ -32,6 +32,9 @@ dependencies:
   path:
     specifier: ^0.12.7
     version: 0.12.7
+  valibot:
+    specifier: 0.2.0
+    version: 0.2.0
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -1887,6 +1890,10 @@ packages:
       is-generator-function: 1.0.10
       is-typed-array: 1.1.12
       which-typed-array: 1.1.11
+    dev: false
+
+  /valibot@0.2.0:
+    resolution: {integrity: sha512-SEc1NIKm0AI2D6moW6pV9MII12FSLBhQG1EPT8IxB+XnnlAbWB2IFqZ6mSa+I0FCei2QloLPAw0VNUi4ZW7xwQ==}
     dev: false
 
   /vite-node@0.33.0(@types/node@20.4.4):

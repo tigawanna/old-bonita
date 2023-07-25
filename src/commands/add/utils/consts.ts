@@ -25,3 +25,18 @@ export default {
 }`;
 
 
+export function twPluginsTostring(plugins:string[]){
+  const tw_plugins = plugins.map((plugin)=>{
+    return `require("${plugin}")`
+  })
+  return tw_plugins
+}
+
+
+export function updateTwPlugins(plugins:string[]){
+const configWithPlugins = tailwind_config_template.replace(
+    /plugins: \[\]/,
+    `plugins: [${twPluginsTostring(plugins)}]`
+  );
+  return configWithPlugins
+}
