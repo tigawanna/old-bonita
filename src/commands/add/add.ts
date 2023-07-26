@@ -1,8 +1,9 @@
-import { installTailwind } from "@/helpers/installers/tailwind/tailwind.ts";
-import { getBonitaConfig, promptForTWConfig } from "@/helpers/utils/config";
+
+import { getBonitaConfig } from "@/utils/config/config";
 import { Command } from "commander";
 import { print } from "gluegun-toolbox";
 import { z } from "zod";
+import { installTailwind } from "../../utils/installers/tailwind/tailwind";
 const program = new Command();
 const addArgsShema = z.array(z.enum(["tailwind", "panda"])).default(["tailwind", "panda"])
 
@@ -16,18 +17,10 @@ export const addCommand = program
     const parsed_args = addArgsShema.parse(args);
     const config = await getBonitaConfig()
 
-    
-    const pkg_installs = parsed_args.map(async(input) => {
+      const pkg_installs = parsed_args.map(async(input) => {
       if (input === "tailwind") {
-        if (!config.tailwind){
-          const tw_config = await promptForTWConfig(config) 
-          return installTailwind(tw_config);
-          // process.exit(0);
-        }
-        return installTailwind(config);
- 
-
-      } else {
+       return installTailwind(config);
+       } else {
         return Promise.resolve(); // or handle the case for other inputs
       }
     });

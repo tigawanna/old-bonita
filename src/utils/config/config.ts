@@ -1,16 +1,16 @@
 import { input, select, checkbox } from "@inquirer/prompts";
 import { existsSync, readFileSync } from "fs";
-import { checkFramework, tryCatchWrapper, writeFileAsync, loader, print } from "gluegun-toolbox";
-
+import { checkFramework, tryCatchWrapper, writeFileAsync, loader, print, supportedFrameworks } from "gluegun-toolbox";
 import { z } from "zod";
-import { validStr } from "./helpers";
-import { writeFile } from "fs/promises";
-const frameworkEnums = ["React+Vite", "Nextjs"] as const;
+import { validStr } from "../helpers/general";
+import { frameworkDefaults } from "../helpers/framework";
+
+// const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
 const bonitaConfigSchema = z.object({
   root_dir: z.string().default("./src"),
   root_styles: z.string().default("./src/index.css"),
-  framework: z.enum(frameworkEnums),
+  framework: z.enum(supportedFrameworks),
   tailwind: z
     .object({
       tw_config: z.string().default("tailwind.config.js"),
@@ -43,11 +43,11 @@ export async function getBonitaConfig() {
 
 export async function promptForConfig() {
   try {
-    const framework_type = (await checkFramework()) as unknown as (typeof frameworkEnums)[0];
-    print.info("Prompting for config...");
-    const answers: TBonitaConfigSchema = {
-      root_dir: await input({ message: "root directory ?", default: "./src"}),
-      root_styles: await input({ message: "Main css file ?", default: "./src/index.css"}),
+    const framework_type = (await checkFramework());
+    const {root_dir,root_styles}  = frameworkDefaults(framework_type);
+      const answers: TBonitaConfigSchema = {
+      root_dir: await input({ message: "root directory ?", default:root_dir}),
+      root_styles: await input({ message: "Main css file ?", default:root_styles}),
       framework:
         framework_type ??
         (await select({
@@ -65,13 +65,22 @@ export async function promptForConfig() {
     throw new Error("error prompting for config" + error.message);
   }
 }
+
+type NonNullableTailwindBonitaConfigSchema = Required<TBonitaConfigSchema>;
 export async function promptForTWConfig(config: TBonitaConfigSchema) {
   try {
-    const framework_type = (await checkFramework()) as unknown as (typeof frameworkEnums)[0];
-    print.info("Prompting for tailwind config...");
-    const answers: TBonitaConfigSchema = {
-      root_dir: validStr(config.root_dir) ?? (await input({ message: "root directory ?",default: "./src"})),
-      root_styles: validStr(config.root_styles) ?? (await input({ message: "Main css file ?",default: "./src/index.css"})),
+    if(config&&config.tailwind&&"tw_config" in config.tailwind){
+      return {
+        ...config, tailwind: {
+          tw_config: config.tailwind.tw_config??"tailwind.config.js",
+          tw_plugins: config.tailwind.tw_plugins??[]
+  } };
+    }
+    const framework_type = await checkFramework();
+    const { root_dir, root_styles, tailwind } = frameworkDefaults(framework_type);
+    const answers = {
+      root_dir: validStr(config.root_dir) ?? (await input({ message: "root directory ?",default:root_dir})),
+      root_styles: validStr(config.root_styles) ?? (await input({ message: "Main css file ?",default:root_styles})),
       framework:
         framework_type ??
         (await select({
@@ -81,6 +90,7 @@ export async function promptForTWConfig(config: TBonitaConfigSchema) {
             { value: "Nextjs", name: "Nextjs" },
           ],
         })),
+ 
       tailwind: {
         tw_config: await input({
           message: "Where do you want to add your tailwind config file",
@@ -96,10 +106,8 @@ export async function promptForTWConfig(config: TBonitaConfigSchema) {
           ],
         }),
       },
-    };
-    if(!answers.tailwind){
-      throw new Error("tailwind config missing");
-    }
+    } satisfies NonNullableTailwindBonitaConfigSchema;
+
     saveConfig(answers);
     return answers;
 
