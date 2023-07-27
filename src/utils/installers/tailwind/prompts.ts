@@ -1,5 +1,5 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
-import { input,checkbox } from "@inquirer/prompts";
+import { input, checkbox } from "@inquirer/prompts";
 import { TTailwindConfigSchema } from "./tailwind";
 
 type NonNullableTailwindBonitaConfigSchema = Required<TBonitaConfigSchema>;

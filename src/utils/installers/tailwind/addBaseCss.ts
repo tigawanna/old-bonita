@@ -16,7 +16,8 @@ export async function addBaseTWcss(inde_styles_path: string) {
     let matches = index_css.match(tailwindRegex);
     let containsAllDirectives = matches !== null && matches.length === 3;
     if (matches !== null && matches.length !== 3) {
-      const new_index_css = tailwind_base_css + "\n" + index_css.replace(tailwindRegex, "").trim();
+      const new_index_css =
+        tailwind_base_css + "\n" + index_css.replace(tailwindRegex, "").trim();
       return writeFile(inde_styles_path, new_index_css);
     }
     if (containsAllDirectives) {

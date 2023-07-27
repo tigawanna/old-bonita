@@ -1,5 +1,5 @@
 import { readFile } from "fs";
-import { destr} from "destr";
+import { destr } from "destr";
 import { IPackageJson } from "@/utils/helpers/types";
 import { print } from "gluegun-toolbox";
 import { writeFile } from "fs/promises";
@@ -26,12 +26,8 @@ export default defineConfig({
 })
 `;
 
-
-
-
-
 export async function addPandaScript() {
-  readFile("./package.json", "utf-8", (err, data) => {
+  readFile("./package.json", "utf-8", (_, data) => {
     if (data) {
       const pkg_json = destr<IPackageJson>(data);
       pkg_json.scripts["prepare"] = "panda codegen";

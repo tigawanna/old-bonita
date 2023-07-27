@@ -26,7 +26,7 @@
     "start": "node ./dist/index.cjs",
     "build": "tsup",
     "dev": "tsup --watch",
-    "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+    "pretty": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "release": "release-it",
     "prepare": "panda codegen"

@@ -8,7 +8,7 @@ export async function promptForPandaConfig(config: TBonitaConfigSchema) {
       return {
         ...config,
         panda: {
-            panda_config_path:config.panda.panda_config_path,
+          panda_config_path: config.panda.panda_config_path,
         },
       };
     }

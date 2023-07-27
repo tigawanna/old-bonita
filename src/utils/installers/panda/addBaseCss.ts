@@ -2,7 +2,6 @@ import { existsSync } from "fs";
 import { readFile, writeFile } from "fs/promises";
 import { panda_base_css } from "./templates";
 
-
 export async function addBasePandacss(inde_styles_path: string) {
   try {
     const index_css_exists = await existsSync(inde_styles_path);
