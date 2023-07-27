@@ -5,14 +5,23 @@ import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/general";
 import { updateTwPlugins, tailwind_config_template, tailwind_base_css } from "./templates";
 import { promptForPandaConfig } from "./prompts";
+import { z } from "zod";
 
+
+// Define the tailwind schema
+export const pandaSchema = z.object({
+  panda_config_path: z.string().default("panda.config.ts"),
+  // tw_plugins: z.array(z.string()).default([]),
+})
+
+export type TPandaConfigSchema = z.infer<typeof pandaSchema>;
 
 export async function installPanda(bonita_config: TBonitaConfigSchema) {
   try {
     const config = await promptForPandaConfig(bonita_config);
-    const root_dir = validateRelativePath(config.root_dir);
+  
     const root_styles = validateRelativePath(config.root_styles);
-    const tw_config_path = validateRelativePath(config.tailwind?.tw_config);
+    const tw_config_path = validateRelativePath(config.panda.panda_config_path);
     const framework = config.framework;
 
     const tw_plugins = config.tailwind?.tw_plugins;

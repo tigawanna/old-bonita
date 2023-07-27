@@ -4,6 +4,8 @@ import { checkFramework, tryCatchWrapper, writeFileAsync, loader, print, support
 import { z } from "zod";
 import { validStr } from "../helpers/general";
 import { frameworkDefaults } from "../helpers/framework";
+import { tailwindSchema } from "../installers/tailwind/tailwind";
+import { pandaSchema } from "../installers/panda/panda";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
@@ -11,12 +13,8 @@ const bonitaConfigSchema = z.object({
   root_dir: z.string().default("./src"),
   root_styles: z.string().default("./src/index.css"),
   framework: z.enum(supportedFrameworks),
-  tailwind: z
-    .object({
-      tw_config: z.string().default("tailwind.config.js"),
-      tw_plugins: z.array(z.string()).default([]),
-    })
-    .optional(),
+  tailwind:tailwindSchema.optional(),
+  panda:pandaSchema.optional(),
 });
 
 export type TBonitaConfigSchema = z.infer<typeof bonitaConfigSchema>;

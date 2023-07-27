@@ -5,7 +5,16 @@ import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/general";
 import { updateTwPlugins, tailwind_config_template, tailwind_base_css } from "./templates";
 import { promptForTWConfig } from "./prompts";
+import { z } from "zod";
 
+
+// Define the tailwind schema
+export const tailwindSchema = z.object({
+  tw_config: z.string().default("tailwind.config.js"),
+  tw_plugins: z.array(z.string()).default([]),
+})
+
+export type TTailwindConfigSchema = z.infer<typeof tailwindSchema>;
 
 export async function installTailwind(bonita_config: TBonitaConfigSchema) {
   try {
