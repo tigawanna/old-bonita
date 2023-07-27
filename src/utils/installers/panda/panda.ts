@@ -4,12 +4,12 @@ import { loader, system, print, writeFileAsync } from "gluegun-toolbox";
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/general";
 import { updateTwPlugins, tailwind_config_template, tailwind_base_css } from "./templates";
-import { promptForTWConfig } from "./prompts";
+import { promptForPandaConfig } from "./prompts";
 
 
-export async function installTailwind(bonita_config: TBonitaConfigSchema) {
+export async function installPanda(bonita_config: TBonitaConfigSchema) {
   try {
-    const config = await promptForTWConfig(bonita_config);
+    const config = await promptForPandaConfig(bonita_config);
     const root_dir = validateRelativePath(config.root_dir);
     const root_styles = validateRelativePath(config.root_styles);
     const tw_config_path = validateRelativePath(config.tailwind?.tw_config);
