@@ -1,11 +1,11 @@
 import { TBonitaConfigSchema} from "@/utils/config/config";
-import { getPackageManager, packageExecCommand } from "@/utils/helpers/get-package-manager";
+import { getPackageManager } from "@/utils/helpers/get-package-manager";
 import { loader, system, print, writeFileAsync } from "gluegun-toolbox";
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/general";
-import { updateTwPlugins, tailwind_config_template, tailwind_base_css } from "./templates";
 import { promptForPandaConfig } from "./prompts";
 import { z } from "zod";
+import { addPandaScript, panda_base_css, panda_config_template } from "./templates";
 
 
 // Define the tailwind schema
@@ -21,82 +21,71 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
     const config = await promptForPandaConfig(bonita_config);
   
     const root_styles = validateRelativePath(config.root_styles);
-    const tw_config_path = validateRelativePath(config.panda.panda_config_path);
+    const panda_config_path = validateRelativePath(config.panda.panda_config_path);
     const framework = config.framework;
 
     const tw_plugins = config.tailwind?.tw_plugins;
     const packageManager = await getPackageManager("./");
-
-
-    const packages = ["tailwindcss", "postcss", "autoprefixer"];
-    const install_packages_command =
-      packageManager +
-      " install -D tailwindcss" +
-      " " +
-      packages.join(" ") +
-      " " +
-      tw_plugins?.join(" ");
-
-    const installing_pkgs_spinners = await loader("installing Tailwind dependancies");
+    
+    const install_packages_command =packageManager +" install -D @pandacss/dev postcss"
+    
+    const installing_pkgs_spinners = await loader("installing pandacss dependancies");
     await system.run(install_packages_command)
     .then(() => {
       installing_pkgs_spinners.succeed();
     })
     .catch((error) => {
-      print.error("Error installing Tailwind dependancies  :\n" + error.message);
+      print.error("Error installing pandacss dependancies  :\n" + error.message);
       print.info("try instalig them manually and try again");
       print.info(install_packages_command);
       installing_pkgs_spinners.failed();
       process.exit(1);
     });
-      
-    const init_tw_spinners = await loader(packageExecCommand(packageManager) +" tailwindcss init -p");
-    await system.run(packageExecCommand(packageManager) + " tailwindcss init -p")
+    
+    const init_tw_spinners = await loader(packageManager + " panda init --postcss");
+    await system.run(packageManager + " panda init --postcss")
     .then(() => {
       init_tw_spinners.succeed();
     })
     .catch((error) => {
-      print.error("Error initializing tailwind  :\n" + error.message);
-      print.info("try instalig them manually and try again");
-      print.info(packageExecCommand(packageManager));
+      print.error("Error initializing pandacss  :\n" + error.message);
+      print.info("try running it namually");
+      print.info(packageManager + " panda init --postcss");
       installing_pkgs_spinners.failed();
       process.exit(1);
     });
 
+    
+    const add_panda_script_spinners = await loader("adding panda prepare script");
+    addPandaScript().then(() => {
+      add_panda_script_spinners.succeed()
 
-    const tw_config_spinners = await loader("adding tailwind configs");
-    if (tw_plugins && tw_plugins?.length > 0) {
-      const tw_config_with_plugins = updateTwPlugins(tw_plugins);
-      await writeFileAsync(tw_config_path ?? "tailwind.config.js", tw_config_with_plugins)
-      .then((res) => {
-        tw_config_spinners.succeed();
-        return res
-      })
-      .catch(
-        (error) => {
-          print.error("Error adding tw config  :\n" + error.message);
-          print.info("try instalig them manually and try again");
-          print.info(tw_config_with_plugins);
-          tw_config_spinners.failed();
-          process.exit(1);
-        }
-      );
-    } else {
-      await writeFileAsync(tw_config_path ?? "tailwind.config.js", tailwind_config_template)
+    }).catch((error) => {
+      print.error("Error adding panda prepare script  :\n" + error.message);
+      print.info("try instalig them manually into the package.json scripts");
+      print.info(`"prepare": "panda codegen"`);
+      add_panda_script_spinners.failed();
+      process.exit(1);
+    })
+  
+
+    const panda_config_spinners = await loader("adding panda configs");
+
+      await writeFileAsync(panda_config_path,panda_config_template)
           .then((res) => {
-              tw_config_spinners.succeed();
+              panda_config_spinners.succeed();
               return res
           })
       .catch(
         (error) => {
           print.error("Error adding tw config  :\n" + error.message);
           print.info("try instalig them manually and try again");
-          print.info(tailwind_config_template);
-          tw_config_spinners.failed();
+          print.info(panda_config_template);
+          panda_config_spinners.failed();
           process.exit(1);
         }
       );
-    }
+    
    
 
     // add base styles into root css file
@@ -112,7 +101,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       .catch((error) => {
         print.error("Error adding base styles in app dir :\n" + error.message);
         print.info("try adding manually and try again");
-        print.info(tailwind_base_css);
+        print.info(panda_base_css);
         base_styles_spinner.failed();
         process.exit(1);
       })
@@ -127,7 +116,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       .catch((error) => {
         print.error("Error adding base styles  :\n" + error.message);
         print.info("try adding manually and try again");
-        print.info(tailwind_base_css);
+        print.info(panda_base_css);
         base_styles_spinner.failed();
         process.exit(1);
       })
@@ -144,7 +133,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
        .catch((error) => {
            print.error("Error adding base styles :\n" + error.message);
            print.info("try adding manually and try again");
-           print.info(tailwind_base_css);
+           print.info(panda_base_css);
            base_styles_spinner.failed();
            process.exit(1);
        })
@@ -155,7 +144,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
 
 
   } catch (error:any) {
-    print.error("Error installing Tailwind  :\n" + error.message);
+    print.error("Error installing pandacss  :\n" + error.message);
     process.exit(1);
   }
 }

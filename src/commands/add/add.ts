@@ -4,8 +4,10 @@ import { Command } from "commander";
 import { print } from "gluegun-toolbox";
 import { z } from "zod";
 import { installTailwind } from "../../utils/installers/tailwind/tailwind";
+import { installPanda } from "@/utils/installers/panda/panda";
 const program = new Command();
-const addArgsShema = z.array(z.enum(["tailwind", "panda"])).default(["tailwind", "panda"])
+const addArgsShema = z.array(z.enum(["tailwind", "panda"]))
+.default(["tailwind", "panda"])
 
 type TAddArgs = z.infer<typeof addArgsShema>;
 
@@ -20,7 +22,11 @@ export const addCommand = program
       const pkg_installs = parsed_args.map(async(input) => {
       if (input === "tailwind") {
        return installTailwind(config);
-       } else {
+       } 
+      if (input === "panda") {
+       return installPanda(config);
+       } 
+       else {
         return Promise.resolve(); // or handle the case for other inputs
       }
     });

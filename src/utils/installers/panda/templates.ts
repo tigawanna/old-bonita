@@ -1,41 +1,44 @@
-export const addable_packages = ["tailwindcss", "pandacss"] as const;
+import { readFile, writeFile } from "fs";
+import { destr} from "destr";
+import { IPackageJson } from "@/utils/helpers/types";
+import { print } from "gluegun-toolbox";
 
-export const tailwind_base_css = `
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+export const panda_base_css = `
+@layer reset, base, tokens, recipes, utilities;
 `;
 
-export const tailwind_config_template = `
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+export const panda_config_template = `
+import { defineConfig } from "@pandacss/dev"
+ 
+export default defineConfig({
+ // Whether to use css reset
+ preflight: true,
+ 
+ // Where to look for your css declarations
+ include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
+ 
+ // Files to exclude
+ exclude: [],
+ 
+ // The output directory for your css system
+ outdir: "styled-system",
+})
 }`;
 
 
-export function twPluginsTostring(plugins: string[]) {
-    const tw_plugins = plugins.map((plugin) => {
-        return `require("${plugin}")`
+
+
+
+export async function addPandaScript() {
+readFile("./package.json", "utf-8",(err, data)=>{
+  if(data){
+    const pkg_json = destr<IPackageJson>(data);
+    pkg_json.scripts["prepare"] = "panda codegen";
+    print.debug(JSON.stringify(pkg_json, null, 2));
+    writeFile("./package.json", JSON.stringify(pkg_json, null, 2), (err) => {
+      if (err) throw err;
     })
-    return tw_plugins
+  throw err;
 }
-
-
-export function updateTwPlugins(plugins: string[]) {
-    const configWithPlugins = tailwind_config_template.replace(
-        /plugins: \[\]/,
-        `plugins: [${twPluginsTostring(plugins)}]`
-    );
-    return configWithPlugins
+})
 }
