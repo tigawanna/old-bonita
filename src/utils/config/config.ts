@@ -24,7 +24,7 @@ export async function getBonitaConfig() {
     if (existsSync("./bonita.config.json")) {
       const bonita_config_file = JSON.parse(readFileSync("./bonita.config.json").toString());
       const bonita_config = bonitaConfigSchema.parse(bonita_config_file);
-      if(bonita_config.tailwind){
+      if(bonita_config){
         return bonita_config;
       }
       else{

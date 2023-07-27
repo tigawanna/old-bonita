@@ -28,7 +28,8 @@
     "dev": "tsup --watch",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "release": "release-it"
+    "release": "release-it",
+    "prepare": "panda codegen"
   },
   "keywords": [
     "bonita",
@@ -38,10 +39,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@pandacss/dev": "^0.8.0",
     "@types/node": "^20.4.4",
     "glob": "^7.2.3",
     "path": "^0.12.7",
     "tsup": "^6.7.0",
+    "tsx": "^3.12.1",
     "typescript": "^5.1.3",
     "vitest": "^0.33.0"
   },
@@ -50,6 +53,7 @@
     "@inquirer/prompts": "^3.0.0",
     "commander": "^11.0.0",
     "destr": "^2.0.0",
+    "execa": "^7.2.0",
     "glob": "^7.2.3",
     "gluegun-toolbox": "link:C:/Users/denni/Desktop/code/npm/gluegun-toolbox",
     "magicast": "^0.2.9",

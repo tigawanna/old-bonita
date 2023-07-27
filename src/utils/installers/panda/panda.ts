@@ -4,6 +4,7 @@ import { loader, system, print, writeFileAsync } from "gluegun-toolbox";
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/general";
 import { promptForPandaConfig } from "./prompts";
+import { execa } from 'execa';
 import { z } from "zod";
 import { addPandaScript, panda_base_css, panda_config_template } from "./templates";
 
@@ -23,40 +24,24 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
     const root_styles = validateRelativePath(config.root_styles);
     const panda_config_path = validateRelativePath(config.panda.panda_config_path);
     const framework = config.framework;
-
-    const tw_plugins = config.tailwind?.tw_plugins;
     const packageManager = await getPackageManager("./");
-    
-    const install_packages_command =packageManager +" install -D @pandacss/dev postcss"
-    
+    const install_packages_command = packageManager +` install "-D @pandacss/dev" `
     const installing_pkgs_spinners = await loader("installing pandacss dependancies");
-    await system.run(install_packages_command)
-    .then(() => {
+    await execa("pnpm", ["install", "-D", "@pandacss/dev"])
+    .then((res) => {
       installing_pkgs_spinners.succeed();
+      print.info(res.command);
+      print.info(res.stdout);
     })
     .catch((error) => {
+      installing_pkgs_spinners.failed();
       print.error("Error installing pandacss dependancies  :\n" + error.message);
       print.info("try instalig them manually and try again");
       print.info(install_packages_command);
-      installing_pkgs_spinners.failed();
       process.exit(1);
     });
     
-    const init_tw_spinners = await loader(packageManager + " panda init --postcss");
-    await system.run(packageManager + " panda init --postcss")
-    .then(() => {
-      init_tw_spinners.succeed();
-    })
-    .catch((error) => {
-      print.error("Error initializing pandacss  :\n" + error.message);
-      print.info("try running it namually");
-      print.info(packageManager + " panda init --postcss");
-      installing_pkgs_spinners.failed();
-      process.exit(1);
-    });
-
-    
-    const add_panda_script_spinners = await loader("adding panda prepare script");
+  const add_panda_script_spinners = await loader("adding panda prepare script");
     addPandaScript().then(() => {
       add_panda_script_spinners.succeed()
 
@@ -70,7 +55,6 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
   
 
     const panda_config_spinners = await loader("adding panda configs");
-
       await writeFileAsync(panda_config_path,panda_config_template)
           .then((res) => {
               panda_config_spinners.succeed();

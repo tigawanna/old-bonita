@@ -19,7 +19,7 @@ export type TTailwindConfigSchema = z.infer<typeof tailwindSchema>;
 export async function installTailwind(bonita_config: TBonitaConfigSchema) {
   try {
     const config = await promptForTWConfig(bonita_config);
-    const root_dir = validateRelativePath(config.root_dir);
+
     const root_styles = validateRelativePath(config.root_styles);
     const tw_config_path = validateRelativePath(config.tailwind?.tw_config);
     const framework = config.framework;
