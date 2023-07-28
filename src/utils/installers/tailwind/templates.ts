@@ -33,7 +33,7 @@ export function twPluginsTostring(plugins: string[]) {
 export function updateTwPlugins(plugins: string[]) {
   const configWithPlugins = tailwind_config_template.replace(
     /plugins: \[\]/,
-    `plugins: [${twPluginsTostring(plugins)}]`
+    `plugins: [${twPluginsTostring(plugins)}]`,
   );
   return configWithPlugins;
 }

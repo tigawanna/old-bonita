@@ -1,9 +1,9 @@
 import { getBonitaConfig } from "@/utils/config/config";
 import { Command } from "commander";
-import { print } from "gluegun-toolbox";
 import { z } from "zod";
 import { installTailwind } from "../../utils/installers/tailwind/tailwind";
 import { installPanda } from "@/utils/installers/panda/panda";
+import { printHelpers } from "@/utils/helpers/print-tools";
 const program = new Command();
 const addArgsShema = z
   .array(z.enum(["tailwind", "panda"]))
@@ -32,12 +32,12 @@ export const addCommand = program
 
     Promise.all(pkg_installs)
       .then(() => {
-        // console.log(print.checkmark);
+        // console.log(printHelpers.checkmark);
       })
       .catch((error) => {
         console.error(
-          print.error("Failed to install packages:"),
-          error.message
+          printHelpers.error("Failed to install packages:"),
+          error.message,
         );
       });
   });

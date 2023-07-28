@@ -1,8 +1,8 @@
 import { readFile } from "fs";
 import { destr } from "destr";
 import { IPackageJson } from "@/utils/helpers/types";
-import { print } from "gluegun-toolbox";
 import { writeFile } from "fs/promises";
+import { printHelpers } from "@/utils/helpers/print-tools";
 
 export const panda_base_css = `
 @layer reset, base, tokens, recipes, utilities;
@@ -37,7 +37,7 @@ export async function addPandaScript() {
           return res;
         })
         .catch((err) => {
-          print.debug(err, "error saving pkg json");
+          printHelpers.debug(err, "error saving pkg json");
           throw err;
         });
     }

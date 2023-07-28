@@ -16,7 +16,7 @@ export async function addPandaScript() {
   //           return res;
   //         })
   //         .catch((err) => {
-  //           print.debug(err, "error saving pkg json");
+  //           printHelpers.debug(err, "error saving pkg json");
   //           throw err;
   //         });
   //     }

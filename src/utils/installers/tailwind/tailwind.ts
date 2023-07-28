@@ -3,9 +3,9 @@ import {
   getPackageManager,
   packageExecCommand,
 } from "@/utils/helpers/get-package-manager";
-import { loader, system, print, writeFileAsync } from "gluegun-toolbox";
+
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
-import { validateRelativePath } from "@/utils/helpers/general";
+import { validateRelativePath } from "@/utils/helpers/strings/general";
 import {
   updateTwPlugins,
   tailwind_config_template,
@@ -13,6 +13,10 @@ import {
 } from "./templates";
 import { promptForTWConfig } from "./prompts";
 import { z } from "zod";
+import { loader } from "@/utils/helpers/loader-tools";
+import { execa } from "execa";
+import { printHelpers } from "@/utils/helpers/print-tools";
+import { writeFile } from "fs/promises";
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -43,35 +47,34 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       tw_plugins?.join(" ");
 
     const installing_pkgs_spinners = await loader(
-      "installing Tailwind dependancies"
+      "installing Tailwind dependancies",
     );
-    await system
-      .run(install_packages_command)
+    // await system.run(install_packages_command)
+    execa("pnpm", ["install", "-D", ...packages, ...tw_plugins])
       .then(() => {
         installing_pkgs_spinners.succeed();
       })
       .catch((error) => {
-        print.error(
-          "Error installing Tailwind dependancies  :\n" + error.message
+        printHelpers.error(
+          "Error installing Tailwind dependancies  :\n" + error.message,
         );
-        print.info("try instalig them manually and try again");
-        print.info(install_packages_command);
+        printHelpers.info("try instalig them manually and try again");
+        printHelpers.info(install_packages_command);
         installing_pkgs_spinners.failed();
         process.exit(1);
       });
 
     const init_tw_spinners = await loader(
-      packageExecCommand(packageManager) + " tailwindcss init -p"
+      packageExecCommand(packageManager) + " tailwindcss init -p",
     );
-    await system
-      .run(packageExecCommand(packageManager) + " tailwindcss init -p")
+    execa(packageManager, ["tailwindcss", "init", "-p"])
       .then(() => {
         init_tw_spinners.succeed();
       })
       .catch((error) => {
-        print.error("Error initializing tailwind  :\n" + error.message);
-        print.info("try instalig them manually and try again");
-        print.info(packageExecCommand(packageManager));
+        printHelpers.error("Error initializing tailwind  :\n" + error.message);
+        printHelpers.info("try instalig them manually and try again");
+        printHelpers.info(packageExecCommand(packageManager));
         installing_pkgs_spinners.failed();
         process.exit(1);
       });
@@ -79,55 +82,55 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
     const tw_config_spinners = await loader("adding tailwind configs");
     if (tw_plugins && tw_plugins?.length > 0) {
       const tw_config_with_plugins = updateTwPlugins(tw_plugins);
-      await writeFileAsync(
+      await writeFile(
         tw_config_path ?? "tailwind.config.js",
-        tw_config_with_plugins
+        tw_config_with_plugins,
       )
         .then((res) => {
           tw_config_spinners.succeed();
           return res;
         })
         .catch((error) => {
-          print.error("Error adding tw config  :\n" + error.message);
-          print.info("try instalig them manually and try again");
-          print.info(tw_config_with_plugins);
+          printHelpers.error("Error adding tw config  :\n" + error.message);
+          printHelpers.info("try instalig them manually and try again");
+          printHelpers.info(tw_config_with_plugins);
           tw_config_spinners.failed();
           process.exit(1);
         });
     } else {
-      await writeFileAsync(
+      await writeFile(
         tw_config_path ?? "tailwind.config.js",
-        tailwind_config_template
+        tailwind_config_template,
       )
         .then((res) => {
           tw_config_spinners.succeed();
           return res;
         })
         .catch((error) => {
-          print.error("Error adding tw config  :\n" + error.message);
-          print.info("try instalig them manually and try again");
-          print.info(tailwind_config_template);
+          printHelpers.error("Error adding tw config  :\n" + error.message);
+          printHelpers.info("try instalig them manually and try again");
+          printHelpers.info(tailwind_config_template);
           tw_config_spinners.failed();
           process.exit(1);
         });
     }
 
     // add base styles into root css file
-    // print.debug({framework,root_styles},"adding base styles into root css file");
+    // printHelpers.debug({framework,root_styles},"adding base styles into root css file");
     const base_styles_spinner = await loader("adding base styles");
     if (framework === "React+Vite") {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          print.success("added base styles");
+          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
-          print.error(
-            "Error adding base styles in app dir :\n" + error.message
+          printHelpers.error(
+            "Error adding base styles in app dir :\n" + error.message,
           );
-          print.info("try adding manually and try again");
-          print.info(tailwind_base_css);
+          printHelpers.info("try adding manually and try again");
+          printHelpers.info(tailwind_base_css);
           base_styles_spinner.failed();
           process.exit(1);
         });
@@ -136,37 +139,37 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          print.success("added base styles");
+          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
-          print.error("Error adding base styles  :\n" + error.message);
-          print.info("try adding manually and try again");
-          print.info(tailwind_base_css);
+          printHelpers.error("Error adding base styles  :\n" + error.message);
+          printHelpers.info("try adding manually and try again");
+          printHelpers.info(tailwind_base_css);
           base_styles_spinner.failed();
           process.exit(1);
         });
     }
     if (framework === "Nextjs") {
-      // print.debug({framework,root_styles},"adding base styles into root css file");
-      // print.info("adding base styles into" + root_dir ?? "./src/index.css");
+      // printHelpers.debug({framework,root_styles},"adding base styles into root css file");
+      // printHelpers.info("adding base styles into" + root_dir ?? "./src/index.css");
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          print.success("added base styles");
+          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
-          print.error("Error adding base styles :\n" + error.message);
-          print.info("try adding manually and try again");
-          print.info(tailwind_base_css);
+          printHelpers.error("Error adding base styles :\n" + error.message);
+          printHelpers.info("try adding manually and try again");
+          printHelpers.info(tailwind_base_css);
           base_styles_spinner.failed();
           process.exit(1);
         });
     }
     base_styles_spinner.succeed();
   } catch (error: any) {
-    print.error("Error installing Tailwind  :\n" + error.message);
+    printHelpers.error("Error installing Tailwind  :\n" + error.message);
     process.exit(1);
   }
 }

@@ -1,18 +1,17 @@
 import { input, select, checkbox } from "@inquirer/prompts";
 import { existsSync, readFileSync } from "fs";
-import {
-  checkFramework,
-  tryCatchWrapper,
-  writeFileAsync,
-  loader,
-  print,
-  supportedFrameworks,
-} from "gluegun-toolbox";
+
 import { z } from "zod";
-import { validStr } from "../helpers/general";
-import { frameworkDefaults } from "../helpers/framework";
 import { tailwindSchema } from "../installers/tailwind/tailwind";
 import { pandaSchema } from "../installers/panda/panda";
+import {
+  supportedFrameworks,
+  checkFramework,
+} from "../helpers/framework/whatFramework";
+import { loader } from "../helpers/loader-tools";
+import { frameworkDefaults } from "../helpers/framework/framework";
+import { writeFile } from "fs/promises";
+import { printHelpers } from "../helpers/print-tools";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
@@ -30,7 +29,7 @@ export async function getBonitaConfig() {
   try {
     if (existsSync("./bonita.config.json")) {
       const bonita_config_file = JSON.parse(
-        readFileSync("./bonita.config.json").toString()
+        readFileSync("./bonita.config.json").toString(),
       );
       const bonita_config = bonitaConfigSchema.parse(bonita_config_file);
       if (bonita_config) {
@@ -76,13 +75,11 @@ export async function promptForConfig() {
 
 export async function saveConfig(config: TBonitaConfigSchema) {
   const save_config_loader = await loader("saving config");
-  const [res, err] = tryCatchWrapper(async () => {
-    await writeFileAsync("./bonita.config.json", JSON.stringify(config));
-  });
-  if (err) {
-    print.error("error saving config " + err.message);
-    print.warning(config);
+  writeFile("./bonita.config.json", JSON.stringify(config)).catch((err) => {
+    printHelpers.error("error saving config ", err.message);
+    printHelpers.warning("Bonita config :", config);
     save_config_loader.failed();
-  }
+  });
+
   save_config_loader.succeed();
 }

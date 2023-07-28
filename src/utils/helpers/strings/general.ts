@@ -1,4 +1,4 @@
-import { strings } from "gluegun-toolbox";
+import { strings } from "./strings";
 
 export function validStr(word: string) {
   if (word) {
