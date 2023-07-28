@@ -4,7 +4,7 @@ import kleur from "kleur";
  * Print a blank line.
  */
 function newline() {
-  console.log("");
+  console.log("\n");
 }
 
 /**
@@ -19,19 +19,27 @@ function divider() {
 }
 
 export function error(message: any, content?: any) {
-  console.log(kleur.red(message) + "\n", content);
+  console.log(kleur.red(message));
+  content && console.log(content);
+  divider()
 }
 
 export function success(message: any, content?: any) {
-  console.log(kleur.green(message) + "\n", content);
+  console.log(kleur.green(message));
+  content && console.log(content);
+
 }
 
 export function warning(message: any, content?: any) {
-  console.log(kleur.yellow(message) + "\n", content);
+  console.log(kleur.yellow(message));
+  content&&console.log(content);
+
 }
 
 export function info(message: any, content?: any) {
-  console.log(kleur.blue(message) + "\n", content);
+  console.log(kleur.cyan(message));
+  content && console.log(content);
+
 }
 
 function fancy(message: any): void {

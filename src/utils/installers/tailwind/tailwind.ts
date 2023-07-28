@@ -50,9 +50,11 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       "installing Tailwind dependancies",
     );
     // await system.run(install_packages_command)
-    execa("pnpm", ["install", "-D", ...packages, ...tw_plugins])
-      .then(() => {
+    await execa("pnpm", ["install", "-D", ...packages, ...tw_plugins])
+      .then((res) => {
         installing_pkgs_spinners.succeed();
+        printHelpers.info(res.command);
+        printHelpers.info(res.stdout);
       })
       .catch((error) => {
         printHelpers.error(
@@ -67,9 +69,13 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
     const init_tw_spinners = await loader(
       packageExecCommand(packageManager) + " tailwindcss init -p",
     );
-    execa(packageManager, ["tailwindcss", "init", "-p"])
-      .then(() => {
+   
+   
+    await execa(packageManager, ["tailwindcss", "init", "-p"])
+      .then((res) => {
         init_tw_spinners.succeed();
+         printHelpers.info(res.command);
+        printHelpers.info(res.stdout);
       })
       .catch((error) => {
         printHelpers.error("Error initializing tailwind  :\n" + error.message);
@@ -122,8 +128,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          printHelpers.success("added base styles");
-          return res;
+        return res;
         })
         .catch((error) => {
           printHelpers.error(
@@ -139,7 +144,6 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
@@ -156,14 +160,13 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
+          base_styles_spinner.failed();
           printHelpers.error("Error adding base styles :\n" + error.message);
           printHelpers.info("try adding manually and try again");
           printHelpers.info(tailwind_base_css);
-          base_styles_spinner.failed();
           process.exit(1);
         });
     }

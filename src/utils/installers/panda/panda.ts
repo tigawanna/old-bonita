@@ -17,7 +17,6 @@ import { printHelpers } from "@/utils/helpers/print-tools";
 // Define the tailwind schema
 export const pandaSchema = z.object({
   panda_config_path: z.string().default("panda.config.ts"),
-  // tw_plugins: z.array(z.string()).default([]),
 });
 
 export type TPandaConfigSchema = z.infer<typeof pandaSchema>;
@@ -93,7 +92,6 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
@@ -110,7 +108,6 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
@@ -127,14 +124,13 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       await addBaseTWcss(root_styles)
         .then((res) => {
           base_styles_spinner.succeed();
-          printHelpers.success("added base styles");
           return res;
         })
         .catch((error) => {
+          base_styles_spinner.failed();
           printHelpers.error("Error adding base styles :\n" + error.message);
           printHelpers.info("try adding manually and try again");
           printHelpers.info(panda_base_css);
-          base_styles_spinner.failed();
           process.exit(1);
         });
     }
