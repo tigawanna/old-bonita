@@ -1,6 +1,7 @@
 import kleur from "kleur";
 import { IPackageJson } from "../types";
 import { readFile } from "fs/promises";
+import { getPkgJson } from "../pkg-json";
 export const supportedFrameworks = [
   "React+Vite",
   "Rakkasjs",
@@ -22,11 +23,7 @@ export function frameworkType(pkg: IPackageJson): TFrameworkType {
 
 export async function checkFramework() {
   try {
-    const pkg_json = await readFile("./package.json", "utf-8");
-    if (!pkg_json) {
-      throw new Error("package.json not found");
-    }
-    const framework = frameworkType(JSON.parse(pkg_json));
+    const framework = frameworkType(await getPkgJson());
     console.log(kleur.green(framework + " detected"));
     return framework;
   } catch (error) {

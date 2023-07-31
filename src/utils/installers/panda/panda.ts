@@ -1,5 +1,5 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import { getPackageManager } from "@/utils/helpers/get-package-manager";
+import { getPackageManager, installPackages } from "@/utils/helpers/package-managers";
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForPandaConfig } from "./prompts";
@@ -30,27 +30,8 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       config.panda.panda_config_path,
     );
     const framework = config.framework;
-    const packageManager = await getPackageManager("./");
-    const install_packages_command =
-      packageManager + ` install "-D @pandacss/dev" `;
-    const installing_pkgs_spinners = await loader(
-      "installing pandacss dependancies",
-    );
-    await execa("pnpm", ["install", "-D", "@pandacss/dev"])
-      .then((res) => {
-        installing_pkgs_spinners.succeed();
-        printHelpers.info(res.command);
-        printHelpers.info(res.stdout);
-      })
-      .catch((error) => {
-        installing_pkgs_spinners.failed();
-        printHelpers.error(
-          "Error installing pandacss dependancies  :\n" + error.message,
-        );
-        printHelpers.info("try instalig them manually and try again");
-        printHelpers.info(install_packages_command);
-        process.exit(1);
-      });
+    await installPackages(["-D", "@pandacss/dev"]);
+     
 
     const add_panda_script_spinners = await loader(
       "adding panda prepare script",
@@ -71,6 +52,8 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
         process.exit(1);
       });
 
+
+      
     const panda_config_spinners = await loader("adding panda configs");
     await writeFile(panda_config_path, panda_config_template, "utf8")
       .then((res) => {

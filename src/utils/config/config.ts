@@ -12,15 +12,17 @@ import { loader } from "../helpers/loader-tools";
 import { frameworkDefaults } from "../helpers/framework/framework";
 import { writeFile } from "fs/promises";
 import { printHelpers } from "../helpers/print-tools";
+import { tanstackViteReactSchema } from "../installers/tanstack/router";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
-const bonitaConfigSchema = z.object({
+export const bonitaConfigSchema = z.object({
   root_dir: z.string().default("./src"),
   root_styles: z.string().default("./src/index.css"),
   framework: z.enum(supportedFrameworks),
   tailwind: tailwindSchema.optional(),
   panda: pandaSchema.optional(),
+  vite_tanstack:tanstackViteReactSchema.optional(),
 });
 
 export type TBonitaConfigSchema = z.infer<typeof bonitaConfigSchema>;

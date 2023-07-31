@@ -1,8 +1,10 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import {
+  execPackageManagerCommand,
   getPackageManager,
+  installPackages,
   packageExecCommand,
-} from "@/utils/helpers/get-package-manager";
+} from "@/utils/helpers/package-managers";
 
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
@@ -38,52 +40,10 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
     const packageManager = await getPackageManager("./");
 
     const packages = ["tailwindcss", "postcss", "autoprefixer"];
-    const install_packages_command =
-      packageManager +
-      " install -D tailwindcss" +
-      " " +
-      packages.join(" ") +
-      " " +
-      tw_plugins?.join(" ");
-
-    const installing_pkgs_spinners = await loader(
-      "installing Tailwind dependancies",
-    );
-    // await system.run(install_packages_command)
-    await execa("pnpm", ["install", "-D", ...packages, ...tw_plugins])
-      .then((res) => {
-        installing_pkgs_spinners.succeed();
-        printHelpers.info(res.command);
-        printHelpers.info(res.stdout);
-      })
-      .catch((error) => {
-        printHelpers.error(
-          "Error installing Tailwind dependancies  :\n" + error.message,
-        );
-        printHelpers.info("try instalig them manually and try again");
-        printHelpers.info(install_packages_command);
-        installing_pkgs_spinners.failed();
-        process.exit(1);
-      });
-
-    const init_tw_spinners = await loader(
-      packageExecCommand(packageManager) + " tailwindcss init -p",
-    );
+    await installPackages(["-D", ...packages, ...tw_plugins]);
+    await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
    
-   
-    await execa(packageManager, ["tailwindcss", "init", "-p"])
-      .then((res) => {
-        init_tw_spinners.succeed();
-         printHelpers.info(res.command);
-        printHelpers.info(res.stdout);
-      })
-      .catch((error) => {
-        printHelpers.error("Error initializing tailwind  :\n" + error.message);
-        printHelpers.info("try instalig them manually and try again");
-        printHelpers.info(packageExecCommand(packageManager));
-        installing_pkgs_spinners.failed();
-        process.exit(1);
-      });
+
 
     const tw_config_spinners = await loader("adding tailwind configs");
     if (tw_plugins && tw_plugins?.length > 0) {
