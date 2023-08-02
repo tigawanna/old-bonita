@@ -22,7 +22,7 @@ export const addCommand = program
       if (input === "panda") {
         return installPanda(config);
       } 
-      if (input === "tanstack-router") {
+      if (input === "tanstack") {
         return installTanstackRouter(config);
       }
       else {

@@ -2,7 +2,6 @@ import { TBonitaConfigSchema } from "@/utils/config/config";
 import { z } from "zod";
 ;import { printHelpers } from "@/utils/helpers/print-tools";
 import { promptForTanstackConfig } from "../prompts";
-import { installPackages } from "@/utils/helpers/package-managers";
 import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/framework/vite";
 
@@ -20,8 +19,6 @@ export async function installTanstackRouter(bonita_config: TBonitaConfigSchema) 
     try {
         //  install dependancies
     const config = await promptForTanstackConfig(bonita_config);
-        // await installPackages(["@tanstack/router@beta","@tanstack/react-query@beta"]);  
-        // await installPackages(["-D", "@tanstack/router-devtools@beta", "@tanstack/eslint-plugin-query@beta","@tanstack/react-query-devtools@beta"]);  
     const res = await setUpRouterTemplate(config);
     await addViteTSPathAlias();
     printHelpers.success("tanstack boilerpate setup succefully successfully",res);

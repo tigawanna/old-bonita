@@ -1,11 +1,11 @@
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { z } from "zod";
-
+const add_args = ["tailwind", "panda", "tanstack"] as const
 const addArgsShema = z
-    .array(z.enum(["tailwind", "panda", "tanstack-router"]))
-    .default(["tailwind", "panda", "tanstack-router"]);
+    .array(z.enum(add_args))
 
-type TAddArgs = z.infer<typeof addArgsShema>;
+
+export type TAddArgs = z.infer<typeof addArgsShema>;
 
 export async function add_command_args(args:any) {
     try {

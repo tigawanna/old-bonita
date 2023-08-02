@@ -18,9 +18,9 @@ export function unzipFile(zipFilePath: string, outputPath: string) {
   try {
     const zip = new AdmZip(zipFilePath);
     zip.extractAllTo(outputPath, true);
-    console.log("File unzipped successfully");
+    printHelpers.success("File unzipped successfully");
   } catch (error) {
-    console.error("Error unzipping file:", error);
+    printHelpers.error("Error unzipping file:", error);
     throw error;
   }
 }
@@ -28,14 +28,14 @@ export function unzipFile(zipFilePath: string, outputPath: string) {
 export async function removeDirectory(directoryPath: string) {
   try {
     await rm(directoryPath, { recursive: true });
-    console.log(directoryPath + " removed successfully");
+    printHelpers.success(directoryPath + " removed successfully");
   } catch (error) {
-    console.error(`Error removing ${directoryPath} directory:`, error);
+    printHelpers.error(`Error removing ${directoryPath} directory:`, error);
     throw error;
   }
 }
 
-export async function mergeOrCreateDirs(originPath: string,destinationPath: string) {
+export async function mergeOrCreateDirs(originPath: string, destinationPath: string) {
   try {
     const origin_pages_dirs = await readDirectories(originPath);
     if (existsSync(destinationPath)) {

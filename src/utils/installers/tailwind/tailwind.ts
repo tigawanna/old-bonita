@@ -1,9 +1,9 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import {
   execPackageManagerCommand,
-  getPackageManager,
+
   installPackages,
-  packageExecCommand,
+
 } from "@/utils/helpers/package-managers";
 
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
@@ -37,7 +37,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
     const framework = config.framework;
 
     const tw_plugins = config.tailwind?.tw_plugins;
-    const packageManager = await getPackageManager("./");
+ 
 
     const packages = ["tailwindcss", "postcss", "autoprefixer"];
     await installPackages(["-D", ...packages, ...tw_plugins]);

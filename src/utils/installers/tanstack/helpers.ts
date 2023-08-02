@@ -1,28 +1,30 @@
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { existsSync } from "fs";
 import { readFile, writeFile} from "fs/promises";
-
 import { cloneRepository} from "@/utils/helpers/repos/get-repo";
-import { mergeOrCreateDirs, readDirectories, removeDirectory } from "@/utils/helpers/fs/directories";
+import { mergeOrCreateDirs} from "@/utils/helpers/fs/directories";
 import { writeOrOverWriteFile } from "@/utils/helpers/fs/files";
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { destr } from "destr";
 import { IPackageJson } from "@/utils/helpers/types";
 import {merge} from "remeda"
+import { loader } from "@/utils/helpers/loader-tools";
+
 
 export async function setUpRouterTemplate(config: TBonitaConfigSchema) {
+  const add_tanstck_spinners = await loader("adding tanstack templates");
   try {
   if(!existsSync("./temp")){
     await getPagesTemplateDirectory();
-
-  }
+}
  const res = await addteTemplateFiles(config)
   await mergePackageJSON();
-  // await removeDirectory("./temp");
   printHelpers.success("setup complete");
+  add_tanstck_spinners.succeed();
 
   return res
   } catch (error: any) {
+    add_tanstck_spinners.failed();
     throw new Error( error.message);
   }
 }
