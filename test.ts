@@ -1,33 +1,43 @@
-import { readFile } from "fs";
-import { destr } from "destr";
-import { IPackageJson } from "./src/utils/helpers/types";
-import { print } from "gluegun-toolbox";
-import { writeFile } from "fs/promises";
-import { execa } from "execa";
+import { readFile, writeFile } from "fs/promises";
+import { addVitePlugin } from "magicast/helpers";
+import kleur from "kleur";
+import { parseModule, generateCode, ImportItemInput} from "magicast";
 
 export async function addPandaScript() {
-  //   readFile("./package.json", "utf-8", (err, data) => {
-  //     if (data) {
-  //       const pkg_json = destr<IPackageJson>(data);
-  //       pkg_json.scripts["prepare"] = "panda codegen";
-  //       const new_pkg_json = JSON.stringify(pkg_json, null, 2);
-  //         writeFile("./package.json", new_pkg_json, { encoding: "utf-8" })
-  //         .then((res) => {
-  //           return res;
-  //         })
-  //         .catch((err) => {
-  //           printHelpers.debug(err, "error saving pkg json");
-  //           throw err;
-  //         });
-  //     }
-  //   });
-  return await execa("pnpm", ["install", "-D", "@pandacss/dev"]);
+try{  
+  //  const mod = parseModule(vite_config_file);
+  // //  console.log("FS: vite config file ",kleur.green(vite_config_file));
+  // const vite_config_magicats = mod
+  // console.log("magicast ",vite_config_magicats);
+  // return vite_config_magicats
+  // const import_ite: ImportItemInput = { local:"tsconfigPaths",from:"vite-tsconfig-paths", imported:"default"}
+  // const imports = mod.imports.$add(import_ite);
+  // console.log("imports ",imports);
+  const vite_config_file = await readFile("vite.config.js",{encoding:"utf-8"}); 
+  const mod = parseModule(vite_config_file);
+  addVitePlugin(mod, {
+    from: "vite-tsconfig-paths",
+    constructor: "tsconfigPaths",
+    imported: "default",
+   });
+  const { code, map } = generateCode(mod);
+  await writeFile("vite.config.js", code, {
+    encoding: "utf-8",
+  })
+  console.log("code: ",kleur.cyan(code));
+  // console.log("map: ",map);
+}
+catch(error:any){
+
+  throw error.message
+}
 }
 
 addPandaScript()
   .then((res) => {
-    console.log("done", res);
+    // console.log(kleur.cyan("done"),kleur.green(res));
+    // console.log("res")
   })
   .catch((err) => {
-    console.log("error", err);
+    console.error(kleur.red("error"), err);
   });

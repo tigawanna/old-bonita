@@ -12,13 +12,16 @@ import { loader } from "../helpers/loader-tools";
 import { frameworkDefaults } from "../helpers/framework/framework";
 import { writeFile } from "fs/promises";
 import { printHelpers } from "../helpers/print-tools";
-import { tanstackViteReactSchema } from "../installers/tanstack/router";
+import { tanstackViteReactSchema } from "../installers/tanstack/router/router";
+import { removeDirectory } from "../helpers/fs/directories";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
 export const bonitaConfigSchema = z.object({
   root_dir: z.string().default("./src"),
   root_styles: z.string().default("./src/index.css"),
+  state: z.string().default("./src/state"),
+  components: z.string().default("./src/components"),
   framework: z.enum(supportedFrameworks),
   tailwind: tailwindSchema.optional(),
   panda: pandaSchema.optional(),
@@ -39,18 +42,22 @@ export async function getBonitaConfig() {
       } else {
         return await promptForConfig();
       }
+
     } else {
       return await promptForConfig();
     }
   } catch (error) {
-    throw error;
+    printHelpers.warning("corrupt bonita config attempting to reset")
+    await removeDirectory("./bonita.config.json");
+    printHelpers.error("error getting bonita config , try again");
+    process.exit(1)
   }
 }
 
 export async function promptForConfig() {
   try {
     const framework_type = await checkFramework();
-    const { root_dir, root_styles } = frameworkDefaults(framework_type);
+    const { root_dir, root_styles,state,components } = frameworkDefaults(framework_type);
     const answers: TBonitaConfigSchema = {
       root_dir: await input({ message: "root directory ?", default: root_dir }),
       root_styles: await input({
@@ -66,6 +73,8 @@ export async function promptForConfig() {
             { value: "Nextjs", name: "Nextjs" },
           ],
         })),
+      state: await input({ message: "state directory ?", default:state }),
+      components: await input({ message: "components directory ?", default:components }),
     };
 
     saveConfig(answers);

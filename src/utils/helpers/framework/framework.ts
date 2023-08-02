@@ -13,6 +13,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
       if (existsSync("./src/app/globals.css")) {
         return {
           root_dir: "./src/app",
+          state: "./src/state",
+          components: "./src/components",
           root_styles: "./src/app/globals.css",
           framework: "Nextjs",
           tailwind: {
@@ -25,6 +27,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
         return {
           root_dir: "./src/pages",
           root_styles: "./src/pages/globals.css",
+          state: "./src/state",
+          components: "./src/components",
           framework: "Nextjs",
           tailwind: {
             tw_config: "tailwind.config.js",
@@ -37,6 +41,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
       return {
         root_dir: "./app",
         root_styles: "./app/globals.css",
+        state: "./state",
+        components: "./components",
         framework: "Nextjs",
         tailwind: {
           tw_config: "tailwind.config.js",
@@ -48,6 +54,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
       return {
         root_dir: "./pages",
         root_styles: "./pages/globals.css",
+        state: "./state",
+        components: "./components",
         framework: "Nextjs",
         tailwind: {
           tw_config: "tailwind.config.js",
@@ -59,6 +67,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
     return {
       root_dir: "./",
       root_styles: "./globals.css",
+      state: "./state",
+      components: "./components",
       framework: "Nextjs",
       tailwind: {
         tw_config: "tailwind.config.js",
@@ -69,6 +79,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
   return {
     root_dir: "./src",
     root_styles: "./src/index.css",
+    state: "./src/state",
+    components: "./src/components",
     framework,
     tailwind: {
       tw_config: "tailwind.config.js",
