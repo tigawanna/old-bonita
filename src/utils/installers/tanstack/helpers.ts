@@ -5,10 +5,10 @@ import { cloneRepository} from "@/utils/helpers/repos/get-repo";
 import { mergeOrCreateDirs} from "@/utils/helpers/fs/directories";
 import { writeOrOverWriteFile } from "@/utils/helpers/fs/files";
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import { destr } from "destr";
 import { IPackageJson } from "@/utils/helpers/types";
 import {merge} from "remeda"
 import { loader } from "@/utils/helpers/loader-tools";
+import { safeJSONParse } from "@/utils/helpers/json/json";
 
 
 export async function setUpRouterTemplate(config: TBonitaConfigSchema) {
@@ -68,9 +68,14 @@ export async function getPagesTemplateDirectory() {
 
 export async function mergePackageJSON(){
   try {
-    const temp_pkg_json = destr <IPackageJson> (await readFile("./temp/package.json", "utf-8"));
-    const project_pkg_json = destr <IPackageJson>(await readFile("./package.json", "utf-8"));
-    const new_pkg_json = merge(project_pkg_json,temp_pkg_json,);
+    const temp_pkg_json = await safeJSONParse <IPackageJson> (await readFile("./temp/package.json", "utf-8"));
+    const project_pkg_json = await safeJSONParse <IPackageJson>(await readFile("./package.json", "utf-8"));
+    const new_pkg_json_deps = merge(project_pkg_json.dependencies,temp_pkg_json.dependencies,);
+    const new_pkg_json_dev_deps = merge(project_pkg_json.devDependencies,temp_pkg_json.devDependencies,);
+    const new_pkg_json = {
+      ...project_pkg_json,dependancies:new_pkg_json_deps,devDependencies:new_pkg_json_dev_deps
+    }
+    
     await writeFile("./package.json", JSON.stringify(new_pkg_json,null, 2),{encoding:"utf-8"});
     return new_pkg_json
   } catch (error:any) {

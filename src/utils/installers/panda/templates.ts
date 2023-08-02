@@ -1,8 +1,8 @@
 import { readFile } from "fs";
-import { destr } from "destr";
 import { IPackageJson } from "@/utils/helpers/types";
 import { writeFile } from "fs/promises";
 import { printHelpers } from "@/utils/helpers/print-tools";
+import { safeJSONParse } from "@/utils/helpers/json/json";
 
 export const panda_base_css = `
 @layer reset, base, tokens, recipes, utilities;
@@ -27,9 +27,9 @@ export default defineConfig({
 `;
 
 export async function addPandaScript() {
-  readFile("./package.json", "utf-8", (_, data) => {
+  readFile("./package.json", "utf-8", async(_, data) => {
     if (data) {
-      const pkg_json = destr<IPackageJson>(data);
+      const pkg_json = await safeJSONParse<IPackageJson>(data);
       pkg_json.scripts["prepare"] = "panda codegen";
       const new_pkg_json = JSON.stringify(pkg_json, null, 2);
       writeFile("./package.json", new_pkg_json, { encoding: "utf-8" })
