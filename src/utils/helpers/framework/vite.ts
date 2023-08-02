@@ -15,6 +15,13 @@ export async function addViteTSPathAlias() {
     await writeFile("vite.config.js", code, {
       encoding: "utf-8",
     });
+    printHelpers.success("added vite-tsconfig-paths");
+      printHelpers.info(`Remember add the snippet in your tsconfig compilerOptions`)
+      printHelpers.info(`    
+      "paths": {
+      "@/*": ["./src/*"]
+    }`)
+    return "vite-tsconfig-paths added";
   } catch (error: any) {
     printHelpers.error("error adding vite-tsconfig-paths " + error.message);
     throw error;

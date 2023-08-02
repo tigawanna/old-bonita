@@ -40,6 +40,7 @@ export function info(message: any, content?: any) {
   console.log(kleur.cyan(message));
   content && console.log(content);
 
+
 }
 
 function fancy(message: any): void {
