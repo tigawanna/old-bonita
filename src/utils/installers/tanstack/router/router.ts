@@ -3,7 +3,7 @@ import { z } from "zod";
 ;import { printHelpers } from "@/utils/helpers/print-tools";
 import { promptForTanstackConfig } from "../prompts";
 import { setUpRouterTemplate } from "../helpers";
-import { addViteTSPathAlias } from "@/utils/helpers/framework/vite";
+import { addViteTSPathAlias } from "@/utils/helpers/framework/vite/vite";
 
 // Define the tailwind schema
 export const tanstackViteReactSchema = z.object({

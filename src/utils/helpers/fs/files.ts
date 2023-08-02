@@ -26,3 +26,24 @@ export async function writeOrOverWriteFile(content: string,path: string) {
         throw error;
     }
 }
+
+
+/**
+ * Checks if any of the given paths exist.
+ *
+ * @param {string[]} possible_paths - An array of paths to check.
+ * @returns {string | null} - The first existing path, or null if none exist.
+ */
+export function pathExists(possible_paths: string[]) {
+    try {
+        for (const path_name of possible_paths) {
+            if (existsSync(path_name)) {
+                return path_name;
+            }
+        }
+        return null;
+    }
+    catch (error: any) {
+        throw error.message
+    }
+}
