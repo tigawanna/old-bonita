@@ -3,7 +3,8 @@ import { z } from "zod";
 ;import { printHelpers } from "@/utils/helpers/print-tools";
 import { promptForTanstackConfig } from "../prompts";
 import { setUpRouterTemplate } from "../helpers";
-import { addViteTSPathAlias } from "@/utils/helpers/framework/vite/vite";
+import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
+
 
 // Define the tailwind schema
 export const tanstackViteReactSchema = z.object({
@@ -27,3 +28,4 @@ export async function installTanstackRouter(bonita_config: TBonitaConfigSchema) 
         process.exit(1);
     }
 }
+
