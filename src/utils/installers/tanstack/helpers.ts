@@ -71,7 +71,7 @@ export async function mergePackageJSON(){
     const temp_pkg_json = destr <IPackageJson> (await readFile("./temp/package.json", "utf-8"));
     const project_pkg_json = destr <IPackageJson>(await readFile("./package.json", "utf-8"));
     const new_pkg_json = merge(project_pkg_json,temp_pkg_json,);
-    await writeFile("./package.json", JSON.stringify(new_pkg_json),{encoding:"utf-8"});
+    await writeFile("./package.json", JSON.stringify(new_pkg_json,null, 2),{encoding:"utf-8"});
     return new_pkg_json
   } catch (error:any) {
     printHelpers.error("error merging package jsons " + error.message);

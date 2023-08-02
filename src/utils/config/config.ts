@@ -86,7 +86,7 @@ export async function promptForConfig() {
 
 export async function saveConfig(config: TBonitaConfigSchema) {
   const save_config_loader = await loader("saving config");
-  writeFile("./bonita.config.json", JSON.stringify(config)).catch((err) => {
+  writeFile("./bonita.config.json", JSON.stringify(config,null, 2)).catch((err) => {
     printHelpers.error("error saving config ", err.message);
     printHelpers.warning("Bonita config :", config);
     save_config_loader.failed();
