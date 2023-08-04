@@ -27,6 +27,3 @@ export async function loader(title: string) {
 
 
 
-export function loaders(title: string) {
-  return new Spinnies();
-}

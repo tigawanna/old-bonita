@@ -5,6 +5,7 @@ import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
 import { removeDirectory } from "@/utils/helpers/fs/directories";
 import Spinnies from "spinnies";
+import { execPackageManagerCommand, installPackages } from "@/utils/helpers/package-managers";
 
 
 // Define the tailwind schema
@@ -18,16 +19,17 @@ export const tanstackViteReactSchema = z.object({
 export type TTanstckViteReactConfigSchema = z.infer<typeof tanstackViteReactSchema>;
 export const vite_tanstack_spinnies = new Spinnies();
 export async function installTanstackRouter(bonita_config: TBonitaConfigSchema) {
-    await vite_tanstack_spinnies.add("main",{text:"adding tanstack to vite react"});
+   
     try {
         //  install dependancies
     const config = await promptForTanstackConfig(bonita_config);
     await setUpRouterTemplate(config);
     await addViteTSPathAlias();
     await removeDirectory("./temp");
-    await vite_tanstack_spinnies.succeed("main");
+    await installPackages([""]);
+ 
      } catch (error: any) {
-        await vite_tanstack_spinnies.fail("main",{text:error.message});
+    
     process.exit(1);
     }
 }

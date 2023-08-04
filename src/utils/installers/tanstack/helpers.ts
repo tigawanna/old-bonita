@@ -8,10 +8,12 @@ import { TBonitaConfigSchema } from "@/utils/config/config";
 import { IPackageJson } from "@/utils/helpers/types";
 import { merge } from "remeda";
 import { safeJSONParse } from "@/utils/helpers/json/json";
-import { vite_tanstack_spinnies } from "./target/vite-spa";
+import Spinnies from "spinnies";
+
 
 export async function setUpRouterTemplate(config: TBonitaConfigSchema) {
-await vite_tanstack_spinnies.add("template",{text:"adding tanstack templates"});
+  const vite_tanstack_spinnies = new Spinnies();
+vite_tanstack_spinnies.add("template",{text:"adding tanstack templates"});
   try {
     if (!existsSync("./temp")) {
       await getPagesTemplateDirectory();
@@ -46,6 +48,7 @@ export async function addTemplateFiles(config: TBonitaConfigSchema) {
 }
 
 export async function getPagesTemplateDirectory() {
+  const vite_tanstack_spinnies = new Spinnies();
  await  vite_tanstack_spinnies.add("clone", { text: "cloning tanstack templates" });
   try {
     const template_dir = await cloneRepository(

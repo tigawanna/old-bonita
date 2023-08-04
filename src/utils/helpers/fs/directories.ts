@@ -28,15 +28,27 @@ export function unzipFile(zipFilePath: string, outputPath: string) {
 export async function removeDirectory(directoryPath: string) {
   const delete_dir_spinner = new Spinnies()
   delete_dir_spinner.add("main");
+  const maxAttempts = 10;
+  const delayTime = 1000;
   try {
     await rm(directoryPath, { recursive: true });
     // printHelpers.success(directoryPath + " removed successfully");
     delete_dir_spinner.succeed("main",{ text: directoryPath + " removed successfully" });
   } catch (error:any) {
     // printHelpers.error(`Error removing ${directoryPath} directory:`, error);
-    delete_dir_spinner.fail("main",{ text: error.message + `try deleting ${directoryPath} manually` });
+    if (error.code === 'EBUSY') {
+      await delay(delayTime);
+      await removeDirectory(directoryPath);
+    } else {
+      delete_dir_spinner.fail("main",{ text: error.message + `try deleting ${directoryPath} manually` });
+      throw error;
+    }
     throw error;
   }
+}
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function mergeOrCreateDirs(originPath: string, destinationPath: string) {
