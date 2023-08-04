@@ -12,7 +12,7 @@ import { loader } from "../helpers/loader-tools";
 import { frameworkDefaults } from "../helpers/framework/framework";
 import { writeFile } from "fs/promises";
 import { printHelpers } from "../helpers/print-tools";
-import { tanstackViteReactSchema } from "../installers/tanstack/router/router";
+import { tanstackViteReactSchema } from "../installers/tanstack/target/vite-spa";
 import { removeDirectory } from "../helpers/fs/directories";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;

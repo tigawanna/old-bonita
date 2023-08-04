@@ -3,7 +3,7 @@ import { Command } from "commander";
 import { installTailwind } from "../../utils/installers/tailwind/tailwind";
 import { installPanda } from "@/utils/installers/panda/panda";
 import { printHelpers } from "@/utils/helpers/print-tools";
-import { installTanstackRouter } from "@/utils/installers/tanstack/router/router";
+import { installTanstackRouter } from "@/utils/installers/tanstack/target/vite-spa";
 import { add_command_args } from "./args";
 const program = new Command();
 

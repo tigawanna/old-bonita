@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
 import { input } from "@inquirer/prompts";
-import { TTanstckViteReactConfigSchema } from "./router/router";
+import { TTanstckViteReactConfigSchema } from "./target/vite-spa";
 
 
 export async function promptForTanstackConfig(config: TBonitaConfigSchema) {
