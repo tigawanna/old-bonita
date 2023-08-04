@@ -10,26 +10,25 @@ import fsextra from "fs-extra";
  * @return {Promise<{success: boolean, operation: string}>} - A promise that resolves to an object indicating the success of the operation and the type of write operation performed.
  */
 export async function writeOrOverWriteFile(path: string, content: string) {
-  // printHelpers.info(path , content);
-  // printHelpers.info("content " + content);
-  try {
-    const is_file_path = existsSync(path);
-    // printHelpers.info("writing file " + path);
-    if (!is_file_path) {
-      // printHelpers.warning("creating file " + path);
-      await fsextra.ensureFile(path);
-      await writeFile(path, content, { flag: "wx", encoding: "utf-8" }).catch((error: any) => {
-        printHelpers.error("error writing file " + error.message);
-        // throw error;
+try {
+  
+
+    if (!existsSync(path)) {
+    await fsextra.ensureFile(path)
+      await writeFile(path, content)
+      .catch((error: any) => {
+        printHelpers.error("error creating file " + error.message);
+        throw error;
       });
       return {
         success: true,
         operation: "create file",
       };
     }
-    const write_content = await readFile(content, "utf-8");
-    await writeFile(path, write_content);
-    // printHelpers.success("file written successfully");
+  // if conent is a valid filepath and nt string connets
+  const is_file_path = existsSync(content);
+  const write_content = is_file_path ? await readFile(content,{encoding: "utf8"}) : content;
+  await writeFile(path, write_content);
     return {
       success: true,
       operation: is_file_path ? "write file contents" : "write string value",

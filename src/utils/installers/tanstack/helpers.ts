@@ -37,12 +37,12 @@ export async function addTemplateFiles(config: TBonitaConfigSchema) {
     await mergeOrCreateDirs("./temp/src/state", config.state);
     await mergeOrCreateDirs("./temp/src/components", config.components);
     await writeOrOverWriteFile(
-      "./temp/src/main.tsx",
       config.vite_tanstack?.src_root_path ?? "./src/main.tsx",
+      "./temp/src/main.tsx",
     );
     await writeOrOverWriteFile(
-      "./temp/src/App.tsx",
       config.vite_tanstack?.src_app_path ?? "./src/App.tsx",
+      "./temp/src/App.tsx",
     );
 
     return "templates added";
