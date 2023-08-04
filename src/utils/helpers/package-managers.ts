@@ -26,7 +26,7 @@ export function packageExecCommand(
     case "pnpm":
       return "pnpm dlx";
     case "bun":
-      return "bux";
+      return "bunx";
     case "npm":
       return "npx";
   }
@@ -45,7 +45,7 @@ export async function installPackages(packages: string[]) {
   try {
     const packageManager = await getPackageManager("./");
     const installing_pkgs_spinners = new Spinnies()
-    installing_pkgs_spinners.add("main",{text:packageManager+ packages.join("")});
+    installing_pkgs_spinners.add("main",{text:packageManager+" install "+" "+ packages.join(" ")});
   
     await execa(packageManager, ["install", ...packages])
       .then((res) => {
@@ -74,7 +74,7 @@ export async function execPackageManagerCommand(input: string[]) {
   try {
     const packageManager = await getPackageManager("./");
     const executing_spinners = new Spinnies()
-    executing_spinners.add("main",{text:packageManager+ input.join("")});
+    executing_spinners.add("main", { text: packageExecCommand(packageManager) +" "+ input.join(" ")});
     await execa(packageExecCommand(packageManager), [...input])
       .then((res) => {
          executing_spinners.succeed("main");
