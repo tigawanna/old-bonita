@@ -9,7 +9,6 @@ export async function readDirectories(directoryPath: string) {
     const directories = files.filter((file) => file.isDirectory()).map((file) => file.name);
     return directories;
   } catch (err) {
-    console.log("Error reading directories:", err);
     throw err;
   }
 }
@@ -39,7 +38,7 @@ export async function mergeOrCreateDirs(originPath: string, destinationPath: str
   try {
     const origin_pages_dirs = await readDirectories(originPath);
     if (existsSync(destinationPath)) {
-      printHelpers.warning("Directory exists, merging files");
+      printHelpers.warning(destinationPath+" directory exists, merging files");
       const target_pages_dirs = await readDirectories(destinationPath);
       const pages_dirs_to_write = origin_pages_dirs.filter(
         (item) => !target_pages_dirs.includes(item)
@@ -66,11 +65,11 @@ export async function mergeOrCreateDirs(originPath: string, destinationPath: str
         },
       };
     } else {
-      printHelpers.warning("Directory doesn't exist, creating new");
+      printHelpers.warning(destinationPath + "directory doesn't exist, creating new");
       await cp(originPath, destinationPath, {
         recursive: true,
       });
-      printHelpers.success("Directory created successfully");
+      printHelpers.success(destinationPath + "directory created successfully");
       return {
         success: true,
         operation: "create",

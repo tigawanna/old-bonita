@@ -37,6 +37,7 @@ export async function writeOrOverWriteFile(content: string,path: string) {
 export function pathExists(possible_paths: string[]) {
     try {
         for (const path_name of possible_paths) {
+            
             if (existsSync(path_name)) {
                 return path_name;
             }

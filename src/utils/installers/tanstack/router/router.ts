@@ -4,6 +4,8 @@ import { z } from "zod";
 import { promptForTanstackConfig } from "../prompts";
 import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
+import { loader } from "@/utils/helpers/loader-tools";
+import { removeDirectory } from "@/utils/helpers/fs/directories";
 
 
 // Define the tailwind schema
@@ -17,14 +19,16 @@ export const tanstackViteReactSchema = z.object({
 export type TTanstckViteReactConfigSchema = z.infer<typeof tanstackViteReactSchema>;
 
 export async function installTanstackRouter(bonita_config: TBonitaConfigSchema) {
+
     try {
         //  install dependancies
     const config = await promptForTanstackConfig(bonita_config);
-    const res = await setUpRouterTemplate(config);
+    await setUpRouterTemplate(config);
     await addViteTSPathAlias();
-    printHelpers.success("tanstack boilerpate setup succefully successfully",res);
+    await removeDirectory("./temp");
+
      } catch (error: any) {
-        printHelpers.error("Error adding tanstack  :\n" + error.message);
+       printHelpers.error("Error adding tanstack  :\n" + error.message);
         process.exit(1);
     }
 }
