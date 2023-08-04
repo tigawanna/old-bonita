@@ -6,7 +6,7 @@ export async function safeJSONParse<T>(item: string) {
     try {
       return safeDestr<T>(item);
     } catch (error) {
-      return safeDestr<T>(await jsonrepair(item))
+      return safeDestr<T>(await jsonrepair(item));
     }
   } catch (error: any) {
     throw error.message;

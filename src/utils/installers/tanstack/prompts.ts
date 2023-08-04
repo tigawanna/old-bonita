@@ -2,7 +2,6 @@ import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
 import { input } from "@inquirer/prompts";
 import { TTanstckViteReactConfigSchema } from "./target/vite-spa";
 
-
 export async function promptForTanstackConfig(config: TBonitaConfigSchema) {
   try {
     if (config && config.vite_tanstack) {
@@ -11,7 +10,7 @@ export async function promptForTanstackConfig(config: TBonitaConfigSchema) {
         vite_tanstack: config.vite_tanstack,
       };
     }
-     const answers: TTanstckViteReactConfigSchema = {
+    const answers: TTanstckViteReactConfigSchema = {
       src_root_path: await input({
         message: "Where is your main.tsx",
         default: "./src/main.tsx",
@@ -31,7 +30,7 @@ export async function promptForTanstackConfig(config: TBonitaConfigSchema) {
     };
     const new_config = {
       ...config,
-      vite_tanstack:answers,
+      vite_tanstack: answers,
     };
     saveConfig(new_config);
     return new_config;

@@ -10,10 +10,9 @@ import { merge } from "remeda";
 import { safeJSONParse } from "@/utils/helpers/json/json";
 import Spinnies from "spinnies";
 
-
 export async function setUpRouterTemplate(config: TBonitaConfigSchema) {
   const vite_tanstack_spinnies = new Spinnies();
-vite_tanstack_spinnies.add("template",{text:"adding tanstack templates"});
+  vite_tanstack_spinnies.add("template", { text: "adding tanstack templates" });
   try {
     if (!existsSync("./temp")) {
       await getPagesTemplateDirectory();
@@ -31,13 +30,19 @@ vite_tanstack_spinnies.add("template",{text:"adding tanstack templates"});
 
 export async function addTemplateFiles(config: TBonitaConfigSchema) {
   try {
-    await mergeOrCreateDirs("./temp/src/pages",config.vite_tanstack?.pages_dir_path ?? "./src/pages");
+    await mergeOrCreateDirs(
+      "./temp/src/pages",
+      config.vite_tanstack?.pages_dir_path ?? "./src/pages",
+    );
     await mergeOrCreateDirs("./temp/src/state", config.state);
     await mergeOrCreateDirs("./temp/src/components", config.components);
-    await writeOrOverWriteFile("./temp/src/main.tsx",config.vite_tanstack?.src_root_path ?? "./src/main.tsx");
+    await writeOrOverWriteFile(
+      "./temp/src/main.tsx",
+      config.vite_tanstack?.src_root_path ?? "./src/main.tsx",
+    );
     await writeOrOverWriteFile(
       "./temp/src/App.tsx",
-      config.vite_tanstack?.src_app_path ?? "./src/App.tsx"
+      config.vite_tanstack?.src_app_path ?? "./src/App.tsx",
     );
 
     return "templates added";
@@ -49,16 +54,18 @@ export async function addTemplateFiles(config: TBonitaConfigSchema) {
 
 export async function getPagesTemplateDirectory() {
   const vite_tanstack_spinnies = new Spinnies();
- await  vite_tanstack_spinnies.add("clone", { text: "cloning tanstack templates" });
+  await vite_tanstack_spinnies.add("clone", {
+    text: "cloning tanstack templates",
+  });
   try {
     const template_dir = await cloneRepository(
       "https://github.com/tigawanna/tanstack-router-vite-react",
-      "./temp"
+      "./temp",
     );
     await vite_tanstack_spinnies.succeed("clone");
     return template_dir;
   } catch (error: any) {
-   await  vite_tanstack_spinnies.succeed("clone", { text: error.message });
+    await vite_tanstack_spinnies.succeed("clone", { text: error.message });
     throw error;
   }
 }
@@ -66,15 +73,18 @@ export async function getPagesTemplateDirectory() {
 export async function mergePackageJSON() {
   try {
     const temp_pkg_json = await safeJSONParse<IPackageJson>(
-      await readFile("./temp/package.json", "utf-8")
+      await readFile("./temp/package.json", "utf-8"),
     );
     const project_pkg_json = await safeJSONParse<IPackageJson>(
-      await readFile("./package.json", "utf-8")
+      await readFile("./package.json", "utf-8"),
     );
-    const new_pkg_json_deps = merge(project_pkg_json.dependencies, temp_pkg_json.dependencies);
+    const new_pkg_json_deps = merge(
+      project_pkg_json.dependencies,
+      temp_pkg_json.dependencies,
+    );
     const new_pkg_json_dev_deps = merge(
       project_pkg_json.devDependencies,
-      temp_pkg_json.devDependencies
+      temp_pkg_json.devDependencies,
     );
     const new_pkg_json = {
       ...project_pkg_json,
@@ -82,7 +92,9 @@ export async function mergePackageJSON() {
       devDependencies: new_pkg_json_dev_deps,
     };
 
-    await writeFile("./package.json", JSON.stringify(new_pkg_json, null, 2), { encoding: "utf-8" });
+    await writeFile("./package.json", JSON.stringify(new_pkg_json, null, 2), {
+      encoding: "utf-8",
+    });
     return new_pkg_json;
   } catch (error: any) {
     printHelpers.error("error merging package jsons " + error.message);

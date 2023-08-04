@@ -25,7 +25,7 @@ export const bonitaConfigSchema = z.object({
   framework: z.enum(supportedFrameworks),
   tailwind: tailwindSchema.optional(),
   panda: pandaSchema.optional(),
-  vite_tanstack:tanstackViteReactSchema.optional(),
+  vite_tanstack: tanstackViteReactSchema.optional(),
 });
 
 export type TBonitaConfigSchema = z.infer<typeof bonitaConfigSchema>;
@@ -42,22 +42,22 @@ export async function getBonitaConfig() {
       } else {
         return await promptForConfig();
       }
-
     } else {
       return await promptForConfig();
     }
   } catch (error) {
-    printHelpers.warning("corrupt bonita config attempting to reset")
+    printHelpers.warning("corrupt bonita config attempting to reset");
     await removeDirectory("./bonita.config.json");
     printHelpers.error("error getting bonita config , try again");
-    process.exit(1)
+    process.exit(1);
   }
 }
 
 export async function promptForConfig() {
   try {
     const framework_type = await checkFramework();
-    const { root_dir, root_styles,state,components } = frameworkDefaults(framework_type);
+    const { root_dir, root_styles, state, components } =
+      frameworkDefaults(framework_type);
     const answers: TBonitaConfigSchema = {
       root_dir: await input({ message: "root directory ?", default: root_dir }),
       root_styles: await input({
@@ -73,8 +73,11 @@ export async function promptForConfig() {
             { value: "Nextjs", name: "Nextjs" },
           ],
         })),
-      state: await input({ message: "state directory ?", default:state }),
-      components: await input({ message: "components directory ?", default:components }),
+      state: await input({ message: "state directory ?", default: state }),
+      components: await input({
+        message: "components directory ?",
+        default: components,
+      }),
     };
 
     saveConfig(answers);
@@ -86,11 +89,13 @@ export async function promptForConfig() {
 
 export async function saveConfig(config: TBonitaConfigSchema) {
   const save_config_loader = await loader("saving config");
-  writeFile("./bonita.config.json", JSON.stringify(config,null, 2)).catch((err) => {
-    printHelpers.error("error saving config ", err.message);
-    printHelpers.warning("Bonita config :", config);
-    save_config_loader.failed();
-  });
+  writeFile("./bonita.config.json", JSON.stringify(config, null, 2)).catch(
+    (err) => {
+      printHelpers.error("error saving config ", err.message);
+      printHelpers.warning("Bonita config :", config);
+      save_config_loader.failed();
+    },
+  );
 
   save_config_loader.succeed();
 }

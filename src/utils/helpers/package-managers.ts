@@ -4,7 +4,6 @@ import { loader } from "./loader-tools";
 import { printHelpers } from "./print-tools";
 import Spinnies from "spinnies";
 
-
 export async function getPackageManager(
   targetDir: string,
 ): Promise<"yarn" | "pnpm" | "bun" | "npm"> {
@@ -32,7 +31,6 @@ export function packageExecCommand(
   }
 }
 
-
 /**
  * Installs packages.
  *
@@ -44,9 +42,11 @@ export function packageExecCommand(
 export async function installPackages(packages: string[]) {
   try {
     const packageManager = await getPackageManager("./");
-    const installing_pkgs_spinners = new Spinnies()
-    installing_pkgs_spinners.add("main",{text:packageManager+" install "+" "+ packages.join(" ")});
-  
+    const installing_pkgs_spinners = new Spinnies();
+    installing_pkgs_spinners.add("main", {
+      text: packageManager + " install " + " " + packages.join(" "),
+    });
+
     await execa(packageManager, ["install", ...packages])
       .then((res) => {
         installing_pkgs_spinners.succeed("main");
@@ -54,10 +54,9 @@ export async function installPackages(packages: string[]) {
         printHelpers.info(res.stdout);
       })
       .catch((error) => {
-        installing_pkgs_spinners.fail("main",{text:error.message});
+        installing_pkgs_spinners.fail("main", { text: error.message });
         process.exit(1);
       });
-
   } catch (error) {
     process.exit(1);
   }
@@ -73,25 +72,22 @@ export async function installPackages(packages: string[]) {
 export async function execPackageManagerCommand(input: string[]) {
   try {
     const packageManager = await getPackageManager("./");
-    const executing_spinners = new Spinnies()
-    executing_spinners.add("main", { text: packageExecCommand(packageManager) +" "+ input.join(" ")});
+    const executing_spinners = new Spinnies();
+    executing_spinners.add("main", {
+      text: packageExecCommand(packageManager) + " " + input.join(" "),
+    });
     await execa(packageExecCommand(packageManager), [...input])
       .then((res) => {
-         executing_spinners.succeed("main");
+        executing_spinners.succeed("main");
         printHelpers.info(res.command);
         printHelpers.info(res.stdout);
       })
       .catch((error) => {
-         executing_spinners.fail("main",{text:error.message});
-          // printHelpers.info(packageExecCommand(packageManager)+ input.join(""));
+        executing_spinners.fail("main", { text: error.message });
+        // printHelpers.info(packageExecCommand(packageManager)+ input.join(""));
         process.exit(1);
       });
-
   } catch (error) {
     process.exit(1);
   }
 }
-
-
-
-

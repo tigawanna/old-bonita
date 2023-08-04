@@ -34,7 +34,9 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
     await installPackages(["-D", "@pandacss/dev"]);
 
     const panda_prepare_spinners = new Spinnies();
-    panda_prepare_spinners.add("prepare", { text: "adding panda prepare script" });
+    panda_prepare_spinners.add("prepare", {
+      text: "adding panda prepare script",
+    });
     addPandaScript()
       .then(() => {
         panda_prepare_spinners.succeed("prepare");
@@ -47,12 +49,10 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
           "try instalig them manually into the package.json scripts",
         );
         printHelpers.info(`"prepare": "panda codegen"`);
-        panda_prepare_spinners.fail("prepare",{text:error.message});
+        panda_prepare_spinners.fail("prepare", { text: error.message });
         process.exit(1);
       });
 
-
-      
     const panda_config_spinners = new Spinnies();
     panda_config_spinners.add("config", { text: "adding panda config script" });
     await writeFile(panda_config_path, panda_config_template, "utf8")
@@ -64,7 +64,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
         printHelpers.error("Error adding tw config  :\n" + error.message);
         printHelpers.info("try instalig them manually and try again");
         printHelpers.info(panda_config_template);
-        panda_config_spinners.fail("config",{text:error.message});
+        panda_config_spinners.fail("config", { text: error.message });
         process.exit(1);
       });
 
@@ -80,10 +80,9 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
           return res;
         })
         .catch((error) => {
-  
           printHelpers.info("try adding manually and try again");
           printHelpers.info(panda_base_css);
-          panda_base_spinners.fail("base-styles",{text:error.message});
+          panda_base_spinners.fail("base-styles", { text: error.message });
           process.exit(1);
         });
     }
@@ -97,7 +96,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
           printHelpers.error("Error adding base styles  :\n" + error.message);
           printHelpers.info("try adding manually and try again");
           printHelpers.info(panda_base_css);
-          panda_base_spinners.fail("base-styles",{text:error.message});
+          panda_base_spinners.fail("base-styles", { text: error.message });
           process.exit(1);
         });
     }
@@ -110,7 +109,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
           return res;
         })
         .catch((error) => {
-          panda_base_spinners.fail("base-styles",{text:error.message});
+          panda_base_spinners.fail("base-styles", { text: error.message });
           printHelpers.error("Error adding base styles :\n" + error.message);
           printHelpers.info("try adding manually and try again");
           printHelpers.info(panda_base_css);

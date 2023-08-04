@@ -3,7 +3,6 @@ import { Spinner } from "@topcli/spinner";
 import kleur from "kleur";
 import Spinnies from "spinnies";
 
-
 export async function asyncLoader<T>(
   promise: Promise<T>,
   title?: string,
@@ -24,6 +23,3 @@ export async function asyncLoader<T>(
 export async function loader(title: string) {
   return new Spinner().start(title);
 }
-
-
-

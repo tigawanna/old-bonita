@@ -11,8 +11,6 @@ export interface IPackageJson {
   [key: string]: any | undefined;
 }
 
-
-
 export interface ITSConfigMini {
   compilerOptions: {
     target?: string;

@@ -1,9 +1,7 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import {
   execPackageManagerCommand,
-
   installPackages,
-
 } from "@/utils/helpers/package-managers";
 
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
@@ -38,15 +36,15 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
     const framework = config.framework;
 
     const tw_plugins = config.tailwind?.tw_plugins;
- 
 
     const packages = ["tailwindcss", "postcss", "autoprefixer"];
     await installPackages(["-D", ...packages, ...tw_plugins]);
     await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
-   
 
-    const  tailwind_config_spinners = new Spinnies();
-    tailwind_config_spinners.add("config", { text: "adding tailwind config file" });
+    const tailwind_config_spinners = new Spinnies();
+    tailwind_config_spinners.add("config", {
+      text: "adding tailwind config file",
+    });
     if (tw_plugins && tw_plugins?.length > 0) {
       const tw_config_with_plugins = updateTwPlugins(tw_plugins);
       await writeFile(
@@ -58,7 +56,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           return res;
         })
         .catch((error) => {
-          tailwind_config_spinners.fail("config",{text:error.message});
+          tailwind_config_spinners.fail("config", { text: error.message });
           printHelpers.error("Error adding tw config  :\n" + error.message);
           printHelpers.info("try instalig them manually and try again");
           printHelpers.info(tw_config_with_plugins);
@@ -74,7 +72,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           return res;
         })
         .catch((error) => {
-          tailwind_config_spinners.fail("config",{text:error.message});
+          tailwind_config_spinners.fail("config", { text: error.message });
           printHelpers.error("Error adding tw config  :\n" + error.message);
           printHelpers.info("try instalig them manually and try again");
           printHelpers.info(tailwind_config_template);
@@ -84,18 +82,21 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
 
     // add base styles into root css file
     // printHelpers.debug({framework,root_styles},"adding base styles into root css file");
-  
 
     const tailwind_base_css_spinners = new Spinnies();
-    tailwind_base_css_spinners.add("base-styles",{text:"adding base css styles "});
+    tailwind_base_css_spinners.add("base-styles", {
+      text: "adding base css styles ",
+    });
     if (framework === "React+Vite") {
       await addBaseTWcss(root_styles)
         .then((res) => {
           tailwind_base_css_spinners.succeed("base-styles");
-        return res;
+          return res;
         })
         .catch((error) => {
-          tailwind_base_css_spinners.fail("base-styles",{text:error.message});
+          tailwind_base_css_spinners.fail("base-styles", {
+            text: error.message,
+          });
           printHelpers.error(
             "Error adding base styles in app dir :\n" + error.message,
           );
@@ -111,7 +112,9 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           return res;
         })
         .catch((error) => {
-          tailwind_base_css_spinners.fail("base-styles",{text:error.message});
+          tailwind_base_css_spinners.fail("base-styles", {
+            text: error.message,
+          });
           printHelpers.error("Error adding base styles  :\n" + error.message);
           printHelpers.info("try adding manually and try again");
           printHelpers.info(tailwind_base_css);
@@ -127,7 +130,9 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           return res;
         })
         .catch((error) => {
-          tailwind_base_css_spinners.fail("base-styles",{text:error.message});
+          tailwind_base_css_spinners.fail("base-styles", {
+            text: error.message,
+          });
           printHelpers.error("Error adding base styles :\n" + error.message);
           printHelpers.info("try adding manually and try again");
           printHelpers.info(tailwind_base_css);

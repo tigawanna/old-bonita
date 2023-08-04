@@ -27,7 +27,7 @@ export default defineConfig({
 `;
 
 export async function addPandaScript() {
-  readFile("./package.json", "utf-8", async(_, data) => {
+  readFile("./package.json", "utf-8", async (_, data) => {
     if (data) {
       const pkg_json = await safeJSONParse<IPackageJson>(data);
       pkg_json.scripts["prepare"] = "panda codegen";

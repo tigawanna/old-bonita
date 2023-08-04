@@ -8,19 +8,31 @@ export async function addTsconfigPathAlias() {
   const ts_config_aliases = new Spinnies();
   ts_config_aliases.add("main", { text: "adding tsconfig path aliases" });
   try {
-    const ts_config_file = await readFile("tsconfig.json", { encoding: "utf-8" });
-    let ts_config_json = await safeJSONParse<Partial<ITSConfigMini>>(ts_config_file);
+    const ts_config_file = await readFile("tsconfig.json", {
+      encoding: "utf-8",
+    });
+    let ts_config_json = await safeJSONParse<Partial<ITSConfigMini>>(
+      ts_config_file,
+    );
     if (!ts_config_json) {
       ts_config_aliases.add("add", { text: "notsconfig found , adding new" });
-      await execPackageManagerCommand(["tsc","--init"]).then(async() => {
-        ts_config_aliases.succeed("add", { text: "added tsconfig path aliases" });
-        const new_ts_config_file = await readFile("tsconfig.json", { encoding: "utf-8" });
-        ts_config_json = await safeJSONParse<Partial<ITSConfigMini>>(new_ts_config_file);
-      }).catch(() => {
-        ts_config_aliases.fail("add", { text: "error adding new tsconfig" });
-        ts_config_aliases.fail("main", { text: "tsconfig not found" });
-        throw new Error("tsconfig not found");
-    })
+      await execPackageManagerCommand(["tsc", "--init"])
+        .then(async () => {
+          ts_config_aliases.succeed("add", {
+            text: "added tsconfig path aliases",
+          });
+          const new_ts_config_file = await readFile("tsconfig.json", {
+            encoding: "utf-8",
+          });
+          ts_config_json = await safeJSONParse<Partial<ITSConfigMini>>(
+            new_ts_config_file,
+          );
+        })
+        .catch(() => {
+          ts_config_aliases.fail("add", { text: "error adding new tsconfig" });
+          ts_config_aliases.fail("main", { text: "tsconfig not found" });
+          throw new Error("tsconfig not found");
+        });
     }
 
     if (!ts_config_json.compilerOptions) {
@@ -31,7 +43,10 @@ export async function addTsconfigPathAlias() {
       };
     }
 
-    if (ts_config_json.compilerOptions && !ts_config_json.compilerOptions.paths) {
+    if (
+      ts_config_json.compilerOptions &&
+      !ts_config_json.compilerOptions.paths
+    ) {
       ts_config_json["compilerOptions"] = {
         ...ts_config_json["compilerOptions"],
         paths: {
@@ -40,7 +55,10 @@ export async function addTsconfigPathAlias() {
       };
     }
 
-    if (ts_config_json.compilerOptions && ts_config_json.compilerOptions.paths) {
+    if (
+      ts_config_json.compilerOptions &&
+      ts_config_json.compilerOptions.paths
+    ) {
       ts_config_json["compilerOptions"] = {
         ...ts_config_json["compilerOptions"],
         paths: {
@@ -56,8 +74,7 @@ export async function addTsconfigPathAlias() {
     ts_config_aliases.succeed("main", { text: "added tsconfig path aliases" });
     return "Success: added tsconfig path aliases";
   } catch (error: any) {
-  ts_config_aliases.fail("main", { text: error.message });
+    ts_config_aliases.fail("main", { text: error.message });
     throw error;
   }
 }
-

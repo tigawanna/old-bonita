@@ -39,7 +39,10 @@ export async function updateViteOptions(options: UserConfig) {
 
 export async function getViteConfig() {
   try {
-    const vite_config_file_path = pathExists(["./vite.config.js", "./vite.config.ts"]);
+    const vite_config_file_path = pathExists([
+      "./vite.config.js",
+      "./vite.config.ts",
+    ]);
     if (!vite_config_file_path) {
       return "no vite config file found, added a generic one in vite.config.ts";
     }
@@ -81,7 +84,10 @@ export async function addViteTSPathAlias() {
   const vite_aliases = new Spinnies();
   vite_aliases.add("main", { text: "adding typescript path aliases" });
   try {
-    const vite_config_file_path = pathExists(["./vite.config.ts", "./vite.config.js"]);
+    const vite_config_file_path = pathExists([
+      "./vite.config.ts",
+      "./vite.config.js",
+    ]);
 
     if (!vite_config_file_path) {
       const generis_vite_config = `
@@ -101,13 +107,19 @@ export async function addViteTSPathAlias() {
         encoding: "utf-8",
       });
       await addTsconfigPathAlias();
-      vite_aliases.succeed("main", { text: "no vite config file found, added a generic one in vite.config.ts" });
+      vite_aliases.succeed("main", {
+        text: "no vite config file found, added a generic one in vite.config.ts",
+      });
       return "no vite config file found, added a generic one in vite.config.ts";
     }
-    const vite_config_file = await readFile(vite_config_file_path, { encoding: "utf-8" });
+    const vite_config_file = await readFile(vite_config_file_path, {
+      encoding: "utf-8",
+    });
     if (vite_config_file.includes("import tsconfigPaths from")) {
       await addTsconfigPathAlias();
-      vite_aliases.succeed("main", { text: "vite-tsconfig-paths already added" });
+      vite_aliases.succeed("main", {
+        text: "vite-tsconfig-paths already added",
+      });
       return "vite-tsconfig-paths already added";
     } else {
       const mod = parseModule(vite_config_file);
@@ -118,7 +130,9 @@ export async function addViteTSPathAlias() {
           imported: "default",
         });
       } catch (error: any) {
-        if (!error.message.includes("Changing import name is not yet implemented")) {
+        if (
+          !error.message.includes("Changing import name is not yet implemented")
+        ) {
           vite_aliases.fail("main", { text: error.message });
           throw error;
         }

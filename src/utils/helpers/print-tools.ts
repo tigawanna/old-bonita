@@ -21,26 +21,22 @@ function divider() {
 export function error(message: any, content?: any) {
   console.log(kleur.red(message));
   content && console.log(content);
-  divider()
+  divider();
 }
 
 export function success(message: any, content?: any) {
   console.log(kleur.green(message));
   content && console.log(content);
-
 }
 
 export function warning(message: any, content?: any) {
   console.log(kleur.yellow(message));
-  content&&console.log(content);
-
+  content && console.log(content);
 }
 
 export function info(message: any, content?: any) {
   console.log(kleur.cyan(message));
   content && console.log(content);
-
-
 }
 
 function fancy(message: any): void {

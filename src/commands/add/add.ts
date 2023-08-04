@@ -12,20 +12,18 @@ export const addCommand = program
   .description("add packages to your project")
   .argument("[inputs...]", "string to split")
   .action(async (args) => {
-
-  const config = await getBonitaConfig();
- const parsed_args = await add_command_args(args);
+    const config = await getBonitaConfig();
+    const parsed_args = await add_command_args(args);
     const pkg_installs = parsed_args.map(async (input) => {
       if (input === "tailwind") {
         return installTailwind(config);
       }
       if (input === "panda") {
         return installPanda(config);
-      } 
+      }
       if (input === "tanstack") {
         return installTanstackRouter(config);
-      }
-      else {
+      } else {
         return Promise.resolve(); // or handle the case for other inputs
       }
     });
