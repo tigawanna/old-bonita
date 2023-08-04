@@ -2,6 +2,7 @@ import { detect } from "@antfu/ni";
 import { execa } from "execa";
 import { loader } from "./loader-tools";
 import { printHelpers } from "./print-tools";
+import Spinnies from "spinnies";
 
 
 export async function getPackageManager(
@@ -32,25 +33,28 @@ export function packageExecCommand(
 }
 
 
+/**
+ * Installs packages.
+ *
+ * @param {string[]} packages - The list of packages to install.
+ * @example installPackages(["-D","tailwindcss","postcss","autoprefixer"]);
+ * will run npm/pnpm/bun/yarn install -D tailwindcss, postcss and autoprefixer
+ * @return {Promise<void>} A Promise that resolves when the installation is complete.
+ */
 export async function installPackages(packages: string[]) {
   try {
     const packageManager = await getPackageManager("./");
-    const installing_pkgs_spinners = await loader(
-      "installing  dependancies",
-    );
+    const installing_pkgs_spinners = new Spinnies()
+    installing_pkgs_spinners.add("main",{text:packageManager+ packages.join("")});
+  
     await execa(packageManager, ["install", ...packages])
       .then((res) => {
-        installing_pkgs_spinners.succeed();
+        installing_pkgs_spinners.succeed("main");
         printHelpers.info(res.command);
         printHelpers.info(res.stdout);
       })
       .catch((error) => {
-        installing_pkgs_spinners.failed();
-        printHelpers.error(
-          "Error installing dependancies  :\n" + error.message,
-        );
-        printHelpers.info("try instalig them manually and try again");
-        printHelpers.info(packageManager + " install" + packages.join(""));
+        installing_pkgs_spinners.fail("main",{text:error.message});
         process.exit(1);
       });
 
@@ -58,25 +62,28 @@ export async function installPackages(packages: string[]) {
     process.exit(1);
   }
 }
+/**
+ * Executes a package manager command asynchronously.
+ *
+ * @param {string[]} input - An array of strings representing the command arguments.
+ * @example execPackageManagerCommand(["tsc","--init"]);
+ * will execute p/npm/yarn/bun tsc --init
+ * @return {Promise<void>} - A promise that resolves when the command is executed successfully.
+ */
 export async function execPackageManagerCommand(input: string[]) {
   try {
     const packageManager = await getPackageManager("./");
-    const executing_spinners = await loader(
-      "running commnand",
-    );
+    const executing_spinners = new Spinnies()
+    executing_spinners.add("main",{text:packageManager+ input.join("")});
     await execa(packageExecCommand(packageManager), [...input])
       .then((res) => {
-         executing_spinners.succeed();
+         executing_spinners.succeed("main");
         printHelpers.info(res.command);
         printHelpers.info(res.stdout);
       })
       .catch((error) => {
-         executing_spinners.failed();
-        printHelpers.error(
-          "Error running command  :\n" + error.message,
-        );
-        
-        printHelpers.info(packageExecCommand(packageManager)+ input.join(""));
+         executing_spinners.fail("main",{text:error.message});
+          // printHelpers.info(packageExecCommand(packageManager)+ input.join(""));
         process.exit(1);
       });
 

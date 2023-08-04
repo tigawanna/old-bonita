@@ -16,7 +16,7 @@ export async function writeOrOverWriteFile(content: string,path: string) {
         const is_file_path = existsSync(content)
         const write_content = is_file_path  ? await readFile(content, 'utf-8'):content
         await writeFile(path, write_content);
-        printHelpers.success("file written successfully");
+        // printHelpers.success("file written successfully");
         return {
             success: true,
             operation: is_file_path?"write file contents":"write string value",

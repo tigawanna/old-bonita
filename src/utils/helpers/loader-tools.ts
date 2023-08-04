@@ -1,5 +1,7 @@
 import { Spinner } from "@topcli/spinner";
+
 import kleur from "kleur";
+import Spinnies from "spinnies";
 
 
 export async function asyncLoader<T>(
@@ -25,3 +27,6 @@ export async function loader(title: string) {
 
 
 
+export function loaders(title: string) {
+  return new Spinnies();
+}

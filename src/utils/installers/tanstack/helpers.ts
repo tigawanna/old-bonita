@@ -8,37 +8,31 @@ import { TBonitaConfigSchema } from "@/utils/config/config";
 import { IPackageJson } from "@/utils/helpers/types";
 import { merge } from "remeda";
 import { safeJSONParse } from "@/utils/helpers/json/json";
-import { loader } from "@/utils/helpers/loader-tools";
+import { vite_tanstack_spinnies } from "./target/vite-spa";
 
 export async function setUpRouterTemplate(config: TBonitaConfigSchema) {
-  const add_tanstck_boilerpalte = await loader("adding tanstack boilerplate");
+await vite_tanstack_spinnies.add("template",{text:"adding tanstack templates"});
   try {
     if (!existsSync("./temp")) {
       await getPagesTemplateDirectory();
     }
     const res = await addTemplateFiles(config);
     await mergePackageJSON();
-    add_tanstck_boilerpalte.succeed();
+    await vite_tanstack_spinnies.succeed("template");
 
     return res;
   } catch (error: any) {
-    add_tanstck_boilerpalte.failed();
+    await vite_tanstack_spinnies.fail("template");
     throw new Error(error.message);
   }
 }
 
 export async function addTemplateFiles(config: TBonitaConfigSchema) {
   try {
-    await mergeOrCreateDirs(
-      "./temp/src/pages",
-      config.vite_tanstack?.pages_dir_path ?? "./src/pages"
-    );
+    await mergeOrCreateDirs("./temp/src/pages",config.vite_tanstack?.pages_dir_path ?? "./src/pages");
     await mergeOrCreateDirs("./temp/src/state", config.state);
     await mergeOrCreateDirs("./temp/src/components", config.components);
-    await writeOrOverWriteFile(
-      "./temp/src/main.tsx",
-      config.vite_tanstack?.src_root_path ?? "./src/main.tsx"
-    );
+    await writeOrOverWriteFile("./temp/src/main.tsx",config.vite_tanstack?.src_root_path ?? "./src/main.tsx");
     await writeOrOverWriteFile(
       "./temp/src/App.tsx",
       config.vite_tanstack?.src_app_path ?? "./src/App.tsx"
@@ -52,15 +46,16 @@ export async function addTemplateFiles(config: TBonitaConfigSchema) {
 }
 
 export async function getPagesTemplateDirectory() {
+ await  vite_tanstack_spinnies.add("clone", { text: "cloning tanstack templates" });
   try {
     const template_dir = await cloneRepository(
       "https://github.com/tigawanna/tanstack-router-vite-react",
       "./temp"
     );
-    printHelpers.success("template dir cloned successfully");
+    await vite_tanstack_spinnies.succeed("clone");
     return template_dir;
   } catch (error: any) {
-    printHelpers.error("error cloning repository " + error.message);
+   await  vite_tanstack_spinnies.succeed("clone", { text: error.message });
     throw error;
   }
 }

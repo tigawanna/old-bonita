@@ -40,6 +40,7 @@
   "devDependencies": {
     "@types/adm-zip": "^0.5.0",
     "@types/node": "^20.4.4",
+    "@types/spinnies": "^0.5.0",
     "glob": "^7.2.3",
     "path": "^0.12.7",
     "prettier": "^3.0.0",
@@ -65,6 +66,7 @@
     "magicast": "^0.2.9",
     "path": "^0.12.7",
     "remeda": "^1.24.0",
+    "spinnies": "^0.5.1",
     "valibot": "0.2.0",
     "zod": "^3.21.4"
   }

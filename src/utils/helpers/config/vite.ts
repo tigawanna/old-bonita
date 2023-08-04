@@ -9,6 +9,7 @@ import { pathExists } from "../fs/files";
 import { addTsconfigPathAlias } from "../json/json-configs";
 import { printHelpers } from "../print-tools";
 import { loader } from "../loader-tools";
+import Spinnies from "spinnies";
 
 export async function updateViteOptions(options: UserConfig) {
   try {
@@ -77,10 +78,11 @@ export async function getViteConfig() {
 }
 
 export async function addViteTSPathAlias() {
-  const add_ts_aliases = await loader("adding typescript path aliases");
+  const vite_aliases = new Spinnies();
+  vite_aliases.add("main", { text: "adding typescript path aliases" });
   try {
     const vite_config_file_path = pathExists(["./vite.config.ts", "./vite.config.js"]);
-    printHelpers.info("vite config file path: "+vite_config_file_path);
+
     if (!vite_config_file_path) {
       const generis_vite_config = `
    import { defineConfig } from 'vite'
@@ -99,14 +101,13 @@ export async function addViteTSPathAlias() {
         encoding: "utf-8",
       });
       await addTsconfigPathAlias();
-      add_ts_aliases.succeed()
+      vite_aliases.succeed("main", { text: "no vite config file found, added a generic one in vite.config.ts" });
       return "no vite config file found, added a generic one in vite.config.ts";
     }
     const vite_config_file = await readFile(vite_config_file_path, { encoding: "utf-8" });
     if (vite_config_file.includes("import tsconfigPaths from")) {
       await addTsconfigPathAlias();
-      printHelpers.warning("vite-tsconfig-paths already added");
-      add_ts_aliases.succeed()
+      vite_aliases.succeed("main", { text: "vite-tsconfig-paths already added" });
       return "vite-tsconfig-paths already added";
     } else {
       const mod = parseModule(vite_config_file);
@@ -118,7 +119,7 @@ export async function addViteTSPathAlias() {
         });
       } catch (error: any) {
         if (!error.message.includes("Changing import name is not yet implemented")) {
-          add_ts_aliases.failed(error.message);
+          vite_aliases.fail("main", { text: error.message });
           throw error;
         }
       }
@@ -128,12 +129,11 @@ export async function addViteTSPathAlias() {
         encoding: "utf-8",
       });
       await addTsconfigPathAlias();
-      add_ts_aliases.succeed()
+      vite_aliases.succeed("main");
       return "vite-tsconfig-paths added";
     }
   } catch (error: any) {
-    printHelpers.error("error adding vite-tsconfig-paths " + error.message);
-    add_ts_aliases.failed(error.message);
+    vite_aliases.fail("main", { text: error.message });
     throw error;
   }
 }
