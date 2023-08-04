@@ -12,8 +12,9 @@ import { loader } from "../helpers/loader-tools";
 import { frameworkDefaults } from "../helpers/framework/framework";
 import { writeFile } from "fs/promises";
 import { printHelpers } from "../helpers/print-tools";
-import { tanstackViteReactSchema } from "../installers/tanstack/target/vite-spa";
+import { tanstackViteReactSchema } from "../installers/tanstack/vite/vite-spa";
 import { removeDirectory } from "../helpers/fs/directories";
+import { nextjsReactSchema } from "../installers/tanstack/nextjs/next";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
@@ -26,6 +27,7 @@ export const bonitaConfigSchema = z.object({
   tailwind: tailwindSchema.optional(),
   panda: pandaSchema.optional(),
   vite_tanstack: tanstackViteReactSchema.optional(),
+  next_config:nextjsReactSchema.optional(),
 });
 
 export type TBonitaConfigSchema = z.infer<typeof bonitaConfigSchema>;

@@ -3,8 +3,8 @@ import { Command } from "commander";
 import { installTailwind } from "../../utils/installers/tailwind/tailwind";
 import { installPanda } from "@/utils/installers/panda/panda";
 import { printHelpers } from "@/utils/helpers/print-tools";
-import { installTanstackRouter } from "@/utils/installers/tanstack/target/vite-spa";
 import { add_command_args } from "./args";
+import { installTanstack } from "@/utils/installers/tanstack/tanstack";
 const program = new Command();
 
 export const addCommand = program
@@ -22,7 +22,7 @@ export const addCommand = program
         return installPanda(config);
       }
       if (input === "tanstack") {
-        return installTanstackRouter(config);
+        return installTanstack(config);
       } else {
         return Promise.resolve(); // or handle the case for other inputs
       }
@@ -39,3 +39,5 @@ export const addCommand = program
         );
       });
   });
+
+

@@ -16,6 +16,7 @@ import { z } from "zod";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { writeFile } from "fs/promises";
 import Spinnies from "spinnies";
+import { promptForNextjsConfig } from "../tanstack/nextjs/prompts";
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -122,8 +123,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
         });
     }
     if (framework === "Nextjs") {
-      // printHelpers.debug({framework,root_styles},"adding base styles into root css file");
-      // printHelpers.info("adding base styles into" + root_dir ?? "./src/index.css");
+      
       await addBaseTWcss(root_styles)
         .then((res) => {
           tailwind_base_css_spinners.succeed("base-styles");
