@@ -1,5 +1,5 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import { installPackages } from "@/utils/helpers/package-managers";
+import { getPackageManager, installPackages, packageExecCommand } from "@/utils/helpers/package-managers";
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForPandaConfig } from "./prompts";
@@ -12,6 +12,7 @@ import {
 import { writeFile } from "fs/promises";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import Spinnies from "spinnies";
+import { confirm } from "@inquirer/prompts";
 
 // Define the tailwind schema
 export const pandaSchema = z.object({
@@ -31,7 +32,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       config.panda.panda_config_path,
     );
     const framework = config.framework;
-    await installPackages(["-D", "@pandacss/dev"]);
+
 
     const panda_prepare_spinners = new Spinnies();
     panda_prepare_spinners.add("prepare", {
@@ -116,6 +117,21 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
           process.exit(1);
         });
     }
+
+    const consent = await confirm({
+      message: "Do you want to isntall the panda depenancies?",
+      default: true,
+    })
+
+
+    if (!consent) {
+      const package_manager = await getPackageManager('.');
+      const install_command = packageExecCommand(package_manager) + " -D @pandacss/dev" ;
+      printHelpers.info("install them manually by running");
+      printHelpers.info(install_command)
+       process.exit(1);
+    }
+    await installPackages(["-D", "@pandacss/dev"]);
     // panda_spinners.succeed("main");
   } catch (error: any) {
     // panda_spinners.fail("main");

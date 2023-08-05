@@ -1,3 +1,8 @@
+import { safeJSONParse } from "@/utils/helpers/json/json";
+import { printHelpers } from "@/utils/helpers/print-tools";
+import { IPackageJson } from "@/utils/helpers/types";
+import Spinnies from "spinnies";
+
 export const addable_packages = ["tailwindcss", "pandacss"] as const;
 
 export const tailwind_base_css = `
@@ -36,4 +41,34 @@ export function updateTwPlugins(plugins: string[]) {
     `plugins: [${twPluginsTostring(plugins)}]`,
   );
   return configWithPlugins;
+}
+
+
+
+
+export async function getPkgJsonTailwindDeps() {
+  const spinnie = new Spinnies();
+  spinnie.add("fetching", { text: "checking latest tailwind versions" });
+  const url = `https://github.com/tailwindlabs/tailwindcss.com/raw/master/package.json`;
+  const headers = {
+    Accept: "application/json",
+  };
+  return fetch(url, { headers })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      return response.text();
+    })
+    .then((data) => {
+      spinnie.succeed("fetching");
+      const pkg_json = safeJSONParse<IPackageJson>(data);
+      return pkg_json;
+   
+    })
+    .catch((error) => {
+      spinnie.fail("fetching", { text: error.message });
+      printHelpers.error(error);
+      throw error;
+    });
 }

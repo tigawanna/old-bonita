@@ -1,0 +1,23 @@
+{
+    "_id": "87ad73c3-52a0-49b5-b1f8-15ae6f555eea",
+    "colName": "tailwind",
+    "created": "2023-08-05T06:54:11.436Z",
+    "sortNum": 10000,
+    "folders": [],
+    "requests": [
+        {
+            "_id": "3f51f708-a8b4-489b-b01f-9881c438827a",
+            "colId": "87ad73c3-52a0-49b5-b1f8-15ae6f555eea",
+            "containerId": "",
+            "name": "example pkg json",
+            "url": "https://github.com/tailwindlabs/tailwindcss.com/raw/master/package.json",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-08-05T06:54:38.359Z",
+            "modified": "2023-08-05T06:54:45.168Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}

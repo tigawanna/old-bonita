@@ -1,7 +1,9 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import {
   execPackageManagerCommand,
+  getPackageManager,
   installPackages,
+  packageExecCommand,
 } from "@/utils/helpers/package-managers";
 
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
@@ -17,6 +19,7 @@ import { printHelpers } from "@/utils/helpers/print-tools";
 import { writeFile } from "fs/promises";
 import Spinnies from "spinnies";
 import { promptForNextjsConfig } from "../tanstack/nextjs/prompts";
+import { confirm } from "@inquirer/prompts";
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -38,9 +41,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
 
     const tw_plugins = config.tailwind?.tw_plugins;
 
-    const packages = ["tailwindcss", "postcss", "autoprefixer"];
-    await installPackages(["-D", ...packages, ...tw_plugins]);
-    await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
+ 
 
     const tailwind_config_spinners = new Spinnies();
     tailwind_config_spinners.add("config", {
@@ -139,6 +140,23 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           process.exit(1);
         });
     }
+    const consent = await confirm({
+      message: "Do you want to isntall the tailwind depenancies?",
+      default: true,
+    })
+    const packages = ["tailwindcss", "postcss", "autoprefixer"];
+
+    if(!consent){
+      const package_manager = await getPackageManager('.');
+      const install_command = packageExecCommand(package_manager)+" -D "+packages.join(" ")+" "+tw_plugins.join(" ");
+      printHelpers.info("install them manually by running");
+      printHelpers.info(install_command)
+      printHelpers.info(packageExecCommand(package_manager)+" tailwindcss init -p");
+      process.exit(1);
+    }
+    await installPackages(["-D", ...packages, ...tw_plugins]);
+    await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
+
     // tailwind_spinners.succeed("main");
   } catch (error: any) {
     // tailwind_spinners.fail("main");

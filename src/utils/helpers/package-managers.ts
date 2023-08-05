@@ -1,6 +1,5 @@
 import { detect } from "@antfu/ni";
 import { execa } from "execa";
-import { loader } from "./loader-tools";
 import { printHelpers } from "./print-tools";
 import Spinnies from "spinnies";
 
