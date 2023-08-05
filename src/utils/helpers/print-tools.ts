@@ -34,6 +34,7 @@ export function warning(message: any, content?: any) {
   content && console.log(content);
 }
 
+
 export function info(message: any, content?: any) {
   if(content){
     console.log(kleur.cyan(message),content);
@@ -48,6 +49,9 @@ function fancy(message: any): void {
   console.log(kleur.italic(message));
 }
 
+function stringify(message:any){
+  console.log(JSON.stringify(message,null,2))
+}
 function debug(message: string, title = "DEBUG"): void {
   const topLine = `vvv -----[ ${title} ]----- vvv`;
   const botLine = `^^^ -----[ ${title} ]----- ^^^`;
@@ -81,6 +85,7 @@ const printHelpers = {
   muted,
   checkmark,
   xmark,
+  stringify
 };
 
 export { printHelpers };

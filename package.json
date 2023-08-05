@@ -67,6 +67,7 @@
     "kleur": "^4.1.5",
     "magicast": "^0.2.9",
     "path": "^0.12.7",
+    "radash": "^11.0.0",
     "remeda": "^1.24.0",
     "spinnies": "^0.5.1",
     "valibot": "0.2.0",
