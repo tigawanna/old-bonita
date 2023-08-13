@@ -1,6 +1,5 @@
-import { input, select, checkbox } from "@inquirer/prompts";
+import { string,select } from 'prask';
 import { existsSync, readFileSync } from "fs";
-
 import { z } from "zod";
 import { tailwindSchema } from "../installers/tailwind/tailwind";
 import { pandaSchema } from "../installers/panda/panda";
@@ -61,25 +60,19 @@ export async function promptForConfig() {
     const { root_dir, root_styles, state, components } =
       frameworkDefaults(framework_type);
     const answers: TBonitaConfigSchema = {
-      root_dir: await input({ message: "root directory ?", default: root_dir }),
-      root_styles: await input({
-        message: "Main css file ?",
-        default: root_styles,
-      }),
+      root_dir: await string({ message: "root directory ?", initial: root_dir }) ?? root_dir,
+      root_styles: await string({message: "Main css file ?",initial: root_styles,}) ?? root_styles,
       framework:
         framework_type ??
         (await select({
           message: "Framework ?",
-          choices: [
-            { value: "React+Vite", name: "React+Vite" },
-            { value: "Nextjs", name: "Nextjs" },
+          options: [
+            { value: "React+Vite", title: "React+Vite" },
+            { value: "Nextjs", title: "Nextjs" },
           ],
         })),
-      state: await input({ message: "state directory ?", default: state }),
-      components: await input({
-        message: "components directory ?",
-        default: components,
-      }),
+      state: await string({ message: "state directory ?", initial: state }) ?? state,
+      components: await string({message: "components directory ?",initial: components})?? components,
     };
 
     saveConfig(answers);

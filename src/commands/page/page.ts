@@ -1,6 +1,5 @@
 import { getBonitaConfig } from "@/utils/config/config";
 import { Command } from "commander";
-import { printHelpers } from "@/utils/helpers/print-tools";
 import { page_command_args } from "./args";
 import { addNewPage } from "@/utils/page/addNewPage";
 
