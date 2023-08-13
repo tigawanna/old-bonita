@@ -14,8 +14,8 @@ import { z } from "zod";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { writeFile } from "fs/promises";
 import Spinnies from "spinnies";
-import { promptForNextjsConfig } from "../../config/prompts/nextjs";
-import { confirm } from "@inquirer/prompts";
+import { boolean } from "prask";
+
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -92,9 +92,9 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
         process.exit(1);
       });
 
-    const consent = await confirm({
+    const consent = await boolean({
       message: "Do you want to install the tailwind depenancies?",
-      default: true,
+      initial: true,
     });
     const packages = ["tailwindcss", "postcss", "autoprefixer"];
 

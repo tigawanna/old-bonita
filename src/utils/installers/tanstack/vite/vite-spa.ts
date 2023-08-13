@@ -4,9 +4,9 @@ import { promptForTanstackConfig } from "../../../config/prompts/vite-tanstack";
 import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
 import { removeDirectory } from "@/utils/helpers/fs/directories";
-import Spinnies from "spinnies";
 import { installPackages} from "@/utils/helpers/package-managers";
-import { confirm } from "@inquirer/prompts";
+import { boolean } from "prask";
+
 
 // Define the tailwind schema
 export const tanstackViteReactSchema = z.object({
@@ -24,9 +24,9 @@ export async function addTanstackToVite(bonita_config: TBonitaConfigSchema,) {
   try {
     //  install dependancies
     const config = await promptForTanstackConfig(bonita_config);
-    const consent = await confirm({
+    const consent = await boolean({
       message: `This will overwrite ${JSON.stringify(bonita_config.vite_tanstack)} Do you want to continue?`,
-      default: true,
+      initial: true,
     });
     if (!consent) {
       process.exit(1);
