@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
 import { input } from "@inquirer/prompts";
-import { TPandaConfigSchema } from "./panda";
+import { TPandaConfigSchema } from "../../installers/panda/panda";
 
 export async function promptForPandaConfig(config: TBonitaConfigSchema) {
   try {
