@@ -29,9 +29,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
     const panda_config_path = validateRelativePath(
       config.panda.panda_config_path,
     );
-    const framework = config.framework;
-
-
+    
     const panda_prepare_spinners = new Spinnies();
     panda_prepare_spinners.add("prepare", {
       text: "adding panda prepare script",
@@ -105,6 +103,6 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
   } catch (error: any) {
     // panda_spinners.fail("main");
     printHelpers.error("Error installing pandacss  :\n" + error.message);
-    process.exit(1);
+    // process.exit(1);
   }
 }

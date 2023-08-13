@@ -1,13 +1,8 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { z } from "zod";
-import { promptForNextjsConfig } from "./prompts";
-import { fetchNextjsTanstackTemplates, updateNextJsfilesWithTemplates, updateNextjsPkgJson } from "./remote-templates";
-import { safeJSONParse } from "@/utils/helpers/json/json";
-import { readFile, writeFile } from "fs/promises";
-import { IPackageJson } from "@/utils/helpers/types";
-import { merge } from "remeda";
-import Spinnies from "spinnies";
+import { fetchNextjsTanstackTemplates, updateNextJsfilesWithTemplates} from "./remote-templates";
 import { confirm } from "@inquirer/prompts";
+
 
 export const nextjsReactSchema = z.object({
     src_dir: z.boolean().default(true),

@@ -1,10 +1,10 @@
-import { getBonitaConfig } from "@/utils/config/config";
+import { TBonitaConfigSchema, getBonitaConfig } from "@/utils/config/config";
 import { Command } from "commander";
 import { installTailwind } from "../../utils/installers/tailwind/tailwind";
 import { installPanda } from "@/utils/installers/panda/panda";
-import { printHelpers } from "@/utils/helpers/print-tools";
-import { add_command_args } from "./args";
+import { TAddArgs, add_command_args } from "./args";
 import { installTanstack } from "@/utils/installers/tanstack/tanstack";
+import { multiselect } from "prask";
 const program = new Command();
 
 export const addCommand = program
@@ -13,31 +13,49 @@ export const addCommand = program
   .argument("[inputs...]", "string to split")
   .action(async (args) => {
     const config = await getBonitaConfig();
-    const parsed_args = await add_command_args(args);
-    const pkg_installs = parsed_args.map(async (input) => {
-      if (input === "tailwind") {
-        return installTailwind(config);
-      }
-      if (input === "panda") {
-        return installPanda(config);
-      }
-      if (input === "tanstack") {
-        return installTanstack(config);
-      } else {
-        return Promise.resolve(); // or handle the case for other inputs
-      }
-    });
+    console.log("args === ", args);
+    if (args.length === 0) {
+      return listAddablePackages(config);
+    }
+    const packages = await add_command_args(args);
 
-    Promise.all(pkg_installs)
-      .then(() => {
-        // console.log(printHelpers.checkmark);
-      })
-      .catch((error) => {
-        console.error(
-          printHelpers.error("Failed to install packages:"),
-          error.message,
-        );
-      });
+    if (packages.includes("tailwind")) {
+      await installTailwind(config);
+    }
+    if (packages.includes("panda")) {
+      await installPanda(config);
+    }
+    if (packages.includes("tanstack")) {
+      await installTanstack(config);
+    }
   });
 
+export async function listAddablePackages(config: TBonitaConfigSchema) {
+  const result = await multiselect<TAddArgs[number]>({
+    /* REQUIRED OPTIONS */
+    message: "Which packages would you like to add?", // The message that the user will read
+    options: [
+      { title: "TailwindCSS", value: "tailwind" },
+      { title: "PandaCSS", value: "panda" },
+      { title: "Tanstack", value: "tanstack" },
+    ],
+    /* OPTIONAL OPTIONS */
+    limit: 10, // Limit to this number the maximum number of options visible at one time
+    min: 1, // Require at least this number of options to be selected
+    //  Require at most this number of options to be selected
+    searchable: false, // Turn off support for filtering the list of options
+  });
 
+  const packages = result && result;
+  if (packages) {
+    if (packages.includes("tailwind")) {
+      await installTailwind(config);
+    }
+    if (packages.includes("panda")) {
+      await installPanda(config);
+    }
+    if (packages.includes("tanstack")) {
+      await installTanstack(config);
+    }
+  }
+}

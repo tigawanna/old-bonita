@@ -118,6 +118,6 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
   } catch (error: any) {
     // tailwind_spinners.fail("main");
     printHelpers.error("Error installing Tailwind  :\n" + error.message);
-    process.exit(1);
+    // process.exit(1);
   }
 }
