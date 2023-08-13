@@ -23,7 +23,6 @@ export async function getTanstckNextTemplateFile(file_name: string) {
       return response.text();
     })
     .then((data) => {
-
       spinnie.succeed("fetching");
       return data;
     })
@@ -37,12 +36,14 @@ export async function getTanstckNextTemplateFile(file_name: string) {
 export async function fetchNextjsTanstackTemplates() {
   try {
     const package_json = await safeJSONParse<IPackageJson>(
-      await getTanstckNextTemplateFile("package.json")
+      await getTanstckNextTemplateFile("package.json"),
     );
     const providers = await getTanstckNextTemplateFile("src/app/providers.tsx");
     const root_layout = await getTanstckNextTemplateFile("src/app/layout.tsx");
     const root_page = await getTanstckNextTemplateFile("src//app/page.tsx");
-    const api_rpute = await getTanstckNextTemplateFile("src/app/api/wait/route.ts");
+    const api_rpute = await getTanstckNextTemplateFile(
+      "src/app/api/wait/route.ts",
+    );
 
     return {
       "package.json": package_json,
@@ -57,7 +58,7 @@ export async function fetchNextjsTanstackTemplates() {
 }
 
 export async function updateNextjsPkgJson(
-  templates: Awaited<ReturnType<typeof fetchNextjsTanstackTemplates>>
+  templates: Awaited<ReturnType<typeof fetchNextjsTanstackTemplates>>,
 ) {
   const pkg_spinnies = new Spinnies();
   try {
@@ -66,18 +67,25 @@ export async function updateNextjsPkgJson(
     const incoming = templates["package.json"];
     const existing = await safeJSONParse<IPackageJson>(package_json);
     existing.dependencies = merge(existing.dependencies, incoming.dependencies);
-    existing.devDependencies = merge(existing.devDependencies, incoming.devDependencies);
+    existing.devDependencies = merge(
+      existing.devDependencies,
+      incoming.devDependencies,
+    );
     await writeFile("package.json", JSON.stringify(existing, null, 2), {});
     pkg_spinnies.succeed("main");
   } catch (error: any) {
-    pkg_spinnies.fail("main", { text: "error updating pkg json" + error.message });
+    pkg_spinnies.fail("main", {
+      text: "error updating pkg json" + error.message,
+    });
   }
 }
 
-export type UpdateNextTemplates = Awaited<ReturnType<typeof fetchNextjsTanstackTemplates>>;
+export type UpdateNextTemplates = Awaited<
+  ReturnType<typeof fetchNextjsTanstackTemplates>
+>;
 export async function updateNextJsfilesWithTemplates(
   template: UpdateNextTemplates,
-  bonita_config: TBonitaConfigSchema
+  bonita_config: TBonitaConfigSchema,
 ) {
   const spinnies = new Spinnies();
   const config = await promptForNextjsConfig(bonita_config);

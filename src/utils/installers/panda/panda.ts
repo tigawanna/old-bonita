@@ -1,5 +1,9 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import { getPackageManager, installPackages, packageExecCommand } from "@/utils/helpers/package-managers";
+import {
+  getPackageManager,
+  installPackages,
+  packageExecCommand,
+} from "@/utils/helpers/package-managers";
 import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForPandaConfig } from "../../config/prompts/panda";
@@ -14,7 +18,6 @@ import { printHelpers } from "@/utils/helpers/print-tools";
 import Spinnies from "spinnies";
 import { boolean } from "prask";
 
-
 // Define the tailwind schema
 export const pandaSchema = z.object({
   panda_config_path: z.string().default("panda.config.ts"),
@@ -23,14 +26,13 @@ export const pandaSchema = z.object({
 export type TPandaConfigSchema = z.infer<typeof pandaSchema>;
 
 export async function installPanda(bonita_config: TBonitaConfigSchema) {
-
   try {
     const config = await promptForPandaConfig(bonita_config);
     const root_styles = validateRelativePath(config.root_styles);
     const panda_config_path = validateRelativePath(
       config.panda.panda_config_path,
     );
-    
+
     const panda_prepare_spinners = new Spinnies();
     panda_prepare_spinners.add("prepare", {
       text: "adding panda prepare script",
@@ -71,33 +73,32 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
 
     const panda_base_spinners = new Spinnies();
     panda_base_spinners.add("base-styles", { text: "adding base styles" });
-   
-      await addBaseTWcss(root_styles)
-        .then((res) => {
-          panda_base_spinners.succeed("base-styles");
-          return res;
-        })
-        .catch((error) => {
-          printHelpers.info("try adding manually and try again");
-          printHelpers.info(panda_base_css);
-          panda_base_spinners.fail("base-styles", { text: error.message });
-          process.exit(1);
-        });
-    
 
+    await addBaseTWcss(root_styles)
+      .then((res) => {
+        panda_base_spinners.succeed("base-styles");
+        return res;
+      })
+      .catch((error) => {
+        printHelpers.info("try adding manually and try again");
+        printHelpers.info(panda_base_css);
+        panda_base_spinners.fail("base-styles", { text: error.message });
+        process.exit(1);
+      });
 
-    const consent = await boolean({
-      message: "Do you want to isntall the panda depenancies?",
-      initial: true,
-    })??true
-
+    const consent =
+      (await boolean({
+        message: "Do you want to isntall the panda depenancies?",
+        initial: true,
+      })) ?? true;
 
     if (!consent) {
-      const package_manager = await getPackageManager('.');
-      const install_command = packageExecCommand(package_manager) + " -D @pandacss/dev" ;
+      const package_manager = await getPackageManager(".");
+      const install_command =
+        packageExecCommand(package_manager) + " -D @pandacss/dev";
       printHelpers.info("install them manually by running");
-      printHelpers.info(install_command)
-       process.exit(1);
+      printHelpers.info(install_command);
+      process.exit(1);
     }
     await installPackages(["-D", "@pandacss/dev"]);
     // panda_spinners.succeed("main");

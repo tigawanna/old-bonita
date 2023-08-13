@@ -27,7 +27,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "pretty": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+ 
     "release": "release-it"
   },
   "keywords": [

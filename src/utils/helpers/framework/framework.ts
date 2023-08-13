@@ -76,7 +76,7 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
       },
     };
   }
-  if(framework === "RedWood"){
+  if (framework === "RedWood") {
     return {
       root_dir: "./web/src",
       root_styles: "./web/src/index.css",

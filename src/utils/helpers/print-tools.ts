@@ -34,14 +34,13 @@ export function warning(message: any, content?: any) {
   content && console.log(content);
 }
 
-
 export function info(message: any, content?: any) {
-  if(content){
-    console.log(kleur.cyan(message),content);
-  }else{
+  if (content) {
+    console.log(kleur.cyan(message), content);
+  } else {
     console.log(kleur.cyan(message));
   }
-    
+
   // content && console.log(content);
 }
 
@@ -49,8 +48,8 @@ function fancy(message: any): void {
   console.log(kleur.italic(message));
 }
 
-function stringify(message:any){
-  console.log(JSON.stringify(message,null,2))
+function stringify(message: any) {
+  console.log(JSON.stringify(message, null, 2));
 }
 function debug(message: string, title = "DEBUG"): void {
   const topLine = `vvv -----[ ${title} ]----- vvv`;
@@ -85,7 +84,7 @@ const printHelpers = {
   muted,
   checkmark,
   xmark,
-  stringify
+  stringify,
 };
 
 export { printHelpers };

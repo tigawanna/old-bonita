@@ -1,4 +1,4 @@
-import { generateCode, loadFile, parseModule} from "magicast";
+import { generateCode, loadFile, parseModule } from "magicast";
 import { addVitePlugin, getDefaultExportOptions } from "magicast/helpers";
 import { UserConfig } from "vite";
 import fg from "fast-glob";

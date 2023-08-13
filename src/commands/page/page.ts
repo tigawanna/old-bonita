@@ -14,6 +14,4 @@ export const pageCommand = program
     const parsed_args = await page_command_args(args);
 
     await addNewPage(parsed_args, config);
-});
-
-
+  });

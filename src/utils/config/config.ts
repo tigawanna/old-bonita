@@ -1,4 +1,3 @@
-
 import { existsSync, readFileSync } from "fs";
 import { z } from "zod";
 import { tailwindSchema } from "../installers/tailwind/tailwind";
@@ -10,7 +9,7 @@ import { printHelpers } from "../helpers/print-tools";
 import { tanstackViteReactSchema } from "../installers/tanstack/vite/vite-spa";
 import { removeDirectory } from "../helpers/fs/directories";
 import { nextjsReactSchema } from "../installers/tanstack/nextjs/next";
-import { promptForConfig } from './prompts/main';
+import { promptForConfig } from "./prompts/main";
 import { spinner } from "prask";
 import Spinnies from "spinnies";
 
@@ -25,7 +24,7 @@ export const bonitaConfigSchema = z.object({
   tailwind: tailwindSchema.optional(),
   panda: pandaSchema.optional(),
   vite_tanstack: tanstackViteReactSchema.optional(),
-  next_config:nextjsReactSchema.optional(),
+  next_config: nextjsReactSchema.optional(),
 });
 
 export type TBonitaConfigSchema = z.infer<typeof bonitaConfigSchema>;
@@ -53,18 +52,16 @@ export async function getBonitaConfig() {
   }
 }
 
-
-
 export async function saveConfig(config: TBonitaConfigSchema) {
-  const save_config_loader = new Spinnies()
+  const save_config_loader = new Spinnies();
   save_config_loader.add("saving config");
   writeFile("./bonita.config.json", JSON.stringify(config, null, 2)).catch(
     (err) => {
       printHelpers.error("error saving config ", err.message);
       printHelpers.warning("Bonita config :", config);
-      save_config_loader.fail("error saving config "+err.message);
+      save_config_loader.fail("error saving config " + err.message);
     },
   );
 
-  save_config_loader.succeed("saved config"); 
+  save_config_loader.succeed("saved config");
 }

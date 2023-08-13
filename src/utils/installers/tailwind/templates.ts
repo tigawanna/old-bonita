@@ -44,9 +44,6 @@ export function updateTwPlugins(plugins: string[]) {
   return configWithPlugins;
 }
 
-
-
-
 export async function getPkgJsonTailwindDeps() {
   const spinnie = new Spinnies();
   spinnie.add("fetching", { text: "checking latest tailwind versions" });
@@ -65,7 +62,6 @@ export async function getPkgJsonTailwindDeps() {
       spinnie.succeed("fetching");
       const pkg_json = safeJSONParse<IPackageJson>(data);
       return pkg_json;
-   
     })
     .catch((error) => {
       spinnie.fail("fetching", { text: error.message });

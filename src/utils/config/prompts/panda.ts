@@ -14,10 +14,11 @@ export async function promptForPandaConfig(config: TBonitaConfigSchema) {
     }
 
     const answers: TPandaConfigSchema = {
-      panda_config_path: await string({
-        message: "Where do you want to add your panda config file",
-        initial: "panda.config.ts",
-      }) ?? "panda.config.ts",
+      panda_config_path:
+        (await string({
+          message: "Where do you want to add your panda config file",
+          initial: "panda.config.ts",
+        })) ?? "panda.config.ts",
     };
     const new_config = {
       ...config,
