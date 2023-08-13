@@ -22,11 +22,9 @@ export const pandaSchema = z.object({
 export type TPandaConfigSchema = z.infer<typeof pandaSchema>;
 
 export async function installPanda(bonita_config: TBonitaConfigSchema) {
-  // const panda_spinners = new Spinnies();
-  // panda_spinners.add("main");
+
   try {
     const config = await promptForPandaConfig(bonita_config);
-
     const root_styles = validateRelativePath(config.root_styles);
     const panda_config_path = validateRelativePath(
       config.panda.panda_config_path,
@@ -74,7 +72,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
 
     const panda_base_spinners = new Spinnies();
     panda_base_spinners.add("base-styles", { text: "adding base styles" });
-    if (framework === "React+Vite") {
+   
       await addBaseTWcss(root_styles)
         .then((res) => {
           panda_base_spinners.succeed("base-styles");
@@ -86,37 +84,8 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
           panda_base_spinners.fail("base-styles", { text: error.message });
           process.exit(1);
         });
-    }
-    if (framework === "Rakkasjs") {
-      await addBaseTWcss(root_styles)
-        .then((res) => {
-          panda_base_spinners.succeed("base-styles");
-          return res;
-        })
-        .catch((error) => {
-          printHelpers.error("Error adding base styles  :\n" + error.message);
-          printHelpers.info("try adding manually and try again");
-          printHelpers.info(panda_base_css);
-          panda_base_spinners.fail("base-styles", { text: error.message });
-          process.exit(1);
-        });
-    }
-    if (framework === "Nextjs") {
-      // printHelpers.debug({framework,root_styles},"adding base styles into root css file");
-      // printHelpers.info("adding base styles into" + root_dir ?? "./src/index.css");
-      await addBaseTWcss(root_styles)
-        .then((res) => {
-          panda_base_spinners.succeed("base-styles");
-          return res;
-        })
-        .catch((error) => {
-          panda_base_spinners.fail("base-styles", { text: error.message });
-          printHelpers.error("Error adding base styles :\n" + error.message);
-          printHelpers.info("try adding manually and try again");
-          printHelpers.info(panda_base_css);
-          process.exit(1);
-        });
-    }
+    
+
 
     const consent = await confirm({
       message: "Do you want to isntall the panda depenancies?",
