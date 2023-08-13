@@ -4,13 +4,15 @@ import { z } from "zod";
 import { tailwindSchema } from "../installers/tailwind/tailwind";
 import { pandaSchema } from "../installers/panda/panda";
 import { supportedFrameworks } from "../helpers/framework/whatFramework";
-import { loader } from "../helpers/loader-tools";
+
 import { writeFile } from "fs/promises";
 import { printHelpers } from "../helpers/print-tools";
 import { tanstackViteReactSchema } from "../installers/tanstack/vite/vite-spa";
 import { removeDirectory } from "../helpers/fs/directories";
 import { nextjsReactSchema } from "../installers/tanstack/nextjs/next";
 import { promptForConfig } from './prompts/main';
+import { spinner } from "prask";
+import Spinnies from "spinnies";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
@@ -54,14 +56,15 @@ export async function getBonitaConfig() {
 
 
 export async function saveConfig(config: TBonitaConfigSchema) {
-  const save_config_loader = await loader("saving config");
+  const save_config_loader = new Spinnies()
+  save_config_loader.add("saving config");
   writeFile("./bonita.config.json", JSON.stringify(config, null, 2)).catch(
     (err) => {
       printHelpers.error("error saving config ", err.message);
       printHelpers.warning("Bonita config :", config);
-      save_config_loader.failed();
+      save_config_loader.fail("error saving config "+err.message);
     },
   );
 
-  save_config_loader.succeed();
+  save_config_loader.succeed("saved config"); 
 }

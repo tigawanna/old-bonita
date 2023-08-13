@@ -3,9 +3,10 @@ import kleur from 'kleur'
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { TBonitaConfigSchema } from '@/utils/config/config';
 import { promptForTanstackConfig } from '@/utils/config/prompts/vite-tanstack';
-import { confirm } from '@inquirer/prompts';
+
 import { removeDirectory } from '@/utils/helpers/fs/directories';
 import { tanstackRouteConfigTempalte, tanstackRouteLayoutTempalte, tanstackRoutePageTempalte, updatetanstackConfig } from './templates';
+import { boolean } from 'prask';
 
 export async function addNewtanstackPage(pages:string[],bonita_config:TBonitaConfigSchema) {
     try {
@@ -24,9 +25,9 @@ export async function addNewtanstackPage(pages:string[],bonita_config:TBonitaCon
     
         if (fs.existsSync(dir_path)) {
             printHelpers.warning(kleur.red(`Error: directory ${dir_name} already exists!`));
-            const overwrite_consent = await confirm({
+            const overwrite_consent = await boolean({
                 message: "Do you want to overwrite it?",
-                default: true
+                initial: true
             });
             if (!overwrite_consent) {
                 process.exit(1);

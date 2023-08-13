@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
-import { input } from "@inquirer/prompts";
 import { TPandaConfigSchema } from "../../installers/panda/panda";
+import { string } from "prask";
 
 export async function promptForPandaConfig(config: TBonitaConfigSchema) {
   try {
@@ -14,10 +14,10 @@ export async function promptForPandaConfig(config: TBonitaConfigSchema) {
     }
 
     const answers: TPandaConfigSchema = {
-      panda_config_path: await input({
+      panda_config_path: await string({
         message: "Where do you want to add your panda config file",
-        default: "panda.config.ts",
-      }),
+        initial: "panda.config.ts",
+      }) ?? "panda.config.ts",
     };
     const new_config = {
       ...config,

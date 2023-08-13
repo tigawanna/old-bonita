@@ -1,14 +1,11 @@
-import { generateCode, loadFile, parseModule, builders } from "magicast";
+import { generateCode, loadFile, parseModule} from "magicast";
 import { addVitePlugin, getDefaultExportOptions } from "magicast/helpers";
-
 import { UserConfig } from "vite";
 import fg from "fast-glob";
-
 import { readFile, writeFile } from "fs/promises";
 import { pathExists } from "../fs/files";
 import { addTsconfigPathAlias } from "../json/json-configs";
 import { printHelpers } from "../print-tools";
-import { loader } from "../loader-tools";
 import Spinnies from "spinnies";
 
 export async function updateViteOptions(options: UserConfig) {
