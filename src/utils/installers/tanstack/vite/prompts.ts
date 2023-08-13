@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
-import { input } from "@inquirer/prompts";
 import { TTanstckViteReactConfigSchema } from "./vite-spa";
+import { string } from "prask";
 
 export async function promptForTanstackConfig(config: TBonitaConfigSchema) {
   try {
@@ -11,22 +11,22 @@ export async function promptForTanstackConfig(config: TBonitaConfigSchema) {
       };
     }
     const answers: TTanstckViteReactConfigSchema = {
-      src_root_path: await input({
+      src_root_path: await string({
         message: "Where is your main.tsx",
-        default: "./src/main.tsx",
-      }),
-      src_app_path: await input({
+        initial: "./src/main.tsx",
+      }) ?? "./src/main.tsx",
+      src_app_path: await string({
         message: "Where is youor App.tsx",
-        default: "./src/App.tsx",
-      }),
-      pages_dir_path: await input({
+        initial: "./src/App.tsx",
+      }) ?? "./src/App.tsx",
+      pages_dir_path: await string({
         message: "Where is your pages directory",
-        default: "./src/pages",
-      }),
-      routes_path: await input({
+        initial: "./src/pages",
+      }) ??"./src/pages",
+      routes_path: await string({
         message: "Where do you want to put your routes",
-        default: "./src/pages/routes/routes.ts",
-      }),
+        initial: "./src/pages/routes/routes.ts",
+      }) ?? "./src/pages/routes/routes.ts",
     };
     const new_config = {
       ...config,

@@ -1,5 +1,5 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
-import { input,confirm } from "@inquirer/prompts";
+import { boolean } from "prask";
 import { TNextjsReactConfigSchema } from "./next";
 
 
@@ -12,10 +12,10 @@ export async function promptForNextjsConfig(config: TBonitaConfigSchema) {
       };
     }
     const answers: TNextjsReactConfigSchema = {
-      src_dir:await confirm({
+      src_dir:await boolean({
         message: "Use src directory?",
-        default:true,        
-      })
+        initial:true,        
+      })??true
     };
     const new_config = {
       ...config,
