@@ -2,7 +2,7 @@ import fs from 'fs'
 import kleur from 'kleur'
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { TBonitaConfigSchema } from '@/utils/config/config';
-import { promptForTanstackConfig } from '@/utils/installers/tanstack/vite/prompts';
+import { promptForTanstackConfig } from '@/utils/config/prompts/vite-tanstack';
 import { confirm } from '@inquirer/prompts';
 import { removeDirectory } from '@/utils/helpers/fs/directories';
 import { tanstackRouteConfigTempalte, tanstackRouteLayoutTempalte, tanstackRoutePageTempalte, updatetanstackConfig } from './templates';

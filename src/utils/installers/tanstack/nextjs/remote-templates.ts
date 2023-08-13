@@ -4,7 +4,7 @@ import { IPackageJson } from "@/utils/helpers/types";
 import { readFile, writeFile } from "fs/promises";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
-import { promptForNextjsConfig } from "./prompts";
+import { promptForNextjsConfig } from "../../../config/prompts/nextjs";
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { printHelpers } from "@/utils/helpers/print-tools";
 

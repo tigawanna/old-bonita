@@ -1,5 +1,5 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
-import { TTanstckViteReactConfigSchema } from "./vite-spa";
+import { TTanstckViteReactConfigSchema } from "../../installers/tanstack/vite/vite-spa";
 import { string } from "prask";
 
 export async function promptForTanstackConfig(config: TBonitaConfigSchema) {

@@ -8,7 +8,6 @@ const program = new Command();
 export const defaultCommand = program
     .command("bonita")
     .description("default bonita ")
-    .action(async (args) => {
-        const config = await getBonitaConfig();
-
-    });
+    .action(async () => {
+        await getBonitaConfig();
+});

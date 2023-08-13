@@ -3,7 +3,7 @@ import { writeFile } from 'fs/promises';
 import { pascal } from 'radash'
 import fs from "fs"
 import { TBonitaConfigSchema } from '@/utils/config/config';
-import { promptForTanstackConfig } from '@/utils/installers/tanstack/vite/prompts';
+import { promptForTanstackConfig } from '@/utils/config/prompts/vite-tanstack';
 import Spinnies from 'spinnies';
 export async function tanstackRouteLayoutTempalte(dir_name:string,dir_path:string){
 const dirName = pascal(dir_name);

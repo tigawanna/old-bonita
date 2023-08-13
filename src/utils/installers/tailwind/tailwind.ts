@@ -14,7 +14,7 @@ import { z } from "zod";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { writeFile } from "fs/promises";
 import Spinnies from "spinnies";
-import { promptForNextjsConfig } from "../tanstack/nextjs/prompts";
+import { promptForNextjsConfig } from "../../config/prompts/nextjs";
 import { confirm } from "@inquirer/prompts";
 
 // Define the tailwind schema

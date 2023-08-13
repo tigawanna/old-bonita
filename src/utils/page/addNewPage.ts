@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema } from "../config/config";
 import { printHelpers } from "../helpers/print-tools";
-import { promptForTanstackConfig } from "../installers/tanstack/vite/prompts";
+import { promptForTanstackConfig } from "../config/prompts/vite-tanstack";
 import { addNewtanstackPage } from "./vite-react/react-vite";
 
 

@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
 import { boolean } from "prask";
-import { TNextjsReactConfigSchema } from "./next";
+import { TNextjsReactConfigSchema } from "../../installers/tanstack/nextjs/next";
 
 
 export async function promptForNextjsConfig(config: TBonitaConfigSchema) {

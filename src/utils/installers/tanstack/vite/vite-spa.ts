@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { z } from "zod";
-import { promptForTanstackConfig } from "./prompts";
+import { promptForTanstackConfig } from "../../../config/prompts/vite-tanstack";
 import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
 import { removeDirectory } from "@/utils/helpers/fs/directories";
