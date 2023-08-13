@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
-import { input, checkbox } from "@inquirer/prompts";
 import { TTailwindConfigSchema } from "./tailwind";
+import { string, multiselect } from 'prask';
 
 type NonNullableTailwindBonitaConfigSchema = Required<TBonitaConfigSchema>;
 export async function promptForTWConfig(config: TBonitaConfigSchema) {
@@ -15,19 +15,19 @@ export async function promptForTWConfig(config: TBonitaConfigSchema) {
       };
     }
     const answers: TTailwindConfigSchema = {
-      tw_config: await input({
+      tw_config: await string({
         message: "Where do you want to add your tailwind config file",
-        default: "tailwind.config.js",
-      }),
-      tw_plugins: await checkbox({
+        initial: "tailwind.config.js",
+      }) ?? "tailwind.config.js",
+      tw_plugins: await multiselect({
         message: "Want some plugins?",
-        choices: [
-          { value: "daisyui", name: "daisyui" },
-          { value: "tailwindcss-animate", name: "tailwindcss-animate" },
-          { value: "tailwind-scrollbar", name: "tailwind-scrollbar" },
-          { value: "tailwindcss-elevation", name: "tailwindcss-elevation" },
+        options: [
+          { value: "daisyui", title: "daisyui" },
+          { value: "tailwindcss-animate",title: "tailwindcss-animate" },
+          { value: "tailwind-scrollbar",title: "tailwind-scrollbar" },
+          { value: "tailwindcss-elevation", title: "tailwindcss-elevation" },
         ],
-      }),
+      })??[""],
     };
 
     const new_config = {
