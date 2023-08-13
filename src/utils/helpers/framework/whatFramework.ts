@@ -1,11 +1,12 @@
 import kleur from "kleur";
 import { IPackageJson } from "../types";
-import { readFile } from "fs/promises";
 import { getPkgJson } from "../pkg-json";
+
 export const supportedFrameworks = [
   "React+Vite",
   "Rakkasjs",
   "Nextjs",
+  "RedWood",
   "Others",
 ] as const;
 export type TFrameworkType = (typeof supportedFrameworks)[number];
@@ -17,6 +18,9 @@ export function frameworkType(pkg: IPackageJson): TFrameworkType {
     return "Nextjs";
   } else if (pkg.devDependencies?.vite && pkg.dependencies?.react) {
     return "React+Vite";
+  }
+  else if (pkg.devDependencies?.["@redwoodjs/core"]) {
+    return "RedWood";
   }
   return "Others";
 }

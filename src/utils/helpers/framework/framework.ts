@@ -76,6 +76,19 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
       },
     };
   }
+  if(framework === "RedWood"){
+    return {
+      root_dir: "./web/src",
+      root_styles: "./web/src/index.css",
+      state: "./web/src/state",
+      components: "./web/src/components",
+      framework: "RedWood",
+      tailwind: {
+        tw_config: "./web/tailwind.config.js",
+        tw_plugins: [],
+      },
+    };
+  }
   return {
     root_dir: "./src",
     root_styles: "./src/index.css",
