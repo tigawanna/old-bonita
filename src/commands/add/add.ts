@@ -13,7 +13,7 @@ export const addCommand = program
   .argument("[inputs...]", "string to split")
   .action(async (args) => {
     const config = await getBonitaConfig();
-    console.log("args === ", args);
+
     if (args.length === 0) {
       return listAddablePackages(config);
     }

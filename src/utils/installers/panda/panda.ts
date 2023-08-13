@@ -50,7 +50,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
         );
         printHelpers.info(`"prepare": "panda codegen"`);
         panda_prepare_spinners.fail("prepare", { text: error.message });
-        process.exit(1);
+        // process.exit(1);
       });
 
     const panda_config_spinners = new Spinnies();
@@ -65,7 +65,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
         printHelpers.info("try instalig them manually and try again");
         printHelpers.info(panda_config_template);
         panda_config_spinners.fail("config", { text: error.message });
-        process.exit(1);
+        // process.exit(1);
       });
 
     // add base styles into root css file
@@ -83,7 +83,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
         printHelpers.info("try adding manually and try again");
         printHelpers.info(panda_base_css);
         panda_base_spinners.fail("base-styles", { text: error.message });
-        process.exit(1);
+        // process.exit(1);
       });
 
     const consent =
@@ -98,7 +98,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
         packageExecCommand(package_manager) + " -D @pandacss/dev";
       printHelpers.info("install them manually by running");
       printHelpers.info(install_command);
-      process.exit(1);
+      // process.exit(1);
     }
     await installPackages(["-D", "@pandacss/dev"]);
     // panda_spinners.succeed("main");

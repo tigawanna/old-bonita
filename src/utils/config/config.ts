@@ -9,9 +9,8 @@ import { printHelpers } from "../helpers/print-tools";
 import { tanstackViteReactSchema } from "../installers/tanstack/vite/vite-spa";
 import { removeDirectory } from "../helpers/fs/directories";
 import { nextjsReactSchema } from "../installers/tanstack/nextjs/next";
-import { promptForConfig } from "./prompts/main";
-import { spinner } from "prask";
 import Spinnies from "spinnies";
+import { promptForConfig } from "./prompts/main";
 
 // const frameworkEnums = ["React+Vite", "Nextjs"] as const;
 
@@ -54,7 +53,7 @@ export async function getBonitaConfig() {
 
 export async function saveConfig(config: TBonitaConfigSchema) {
   const save_config_loader = new Spinnies();
-  save_config_loader.add("saving config");
+  save_config_loader.add("saved config");
   writeFile("./bonita.config.json", JSON.stringify(config, null, 2)).catch(
     (err) => {
       printHelpers.error("error saving config ", err.message);

@@ -58,7 +58,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           printHelpers.error("Error adding tw config  :\n" + error.message);
           printHelpers.info("try instalig them manually and try again");
           printHelpers.info(tw_config_with_plugins);
-          process.exit(1);
+          // process.exit(1);
         });
     } else {
       await writeFile(
@@ -74,7 +74,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
           printHelpers.error("Error adding tw config  :\n" + error.message);
           printHelpers.info("try instalig them manually and try again");
           printHelpers.info(tailwind_config_template);
-          process.exit(1);
+          // process.exit(1);
         });
     }
 
@@ -100,7 +100,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
         );
         printHelpers.info("try adding manually and try again");
         printHelpers.info(tailwind_base_css);
-        process.exit(1);
+        // process.exit(1);
       });
 
     const consent = await boolean({
@@ -122,7 +122,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       printHelpers.info(
         packageExecCommand(package_manager) + " tailwindcss init -p",
       );
-      process.exit(1);
+      // process.exit(1);
     }
     await installPackages(["-D", ...packages, ...tw_plugins]);
     await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
