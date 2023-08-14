@@ -15,6 +15,18 @@ export async function getPkgJson(path: string = "./package.json"): Promise<IPack
     throw new Error("error getting package json");
   }
 }
+export async function getDepsJson(path: string = "./deps.json"){
+  try {
+    const deps_json = await import ("../../../deps.json");
+    const pkg_json = await readFile(path, "utf-8");
+    if (!pkg_json) {
+      throw new Error("package.json not found");
+    }
+    return safeJSONParse<typeof deps_json>(pkg_json);
+  } catch (error) {
+    throw new Error("error getting deps json");
+  }
+}
 
 export async function addDepsToPackageJsons(deps: string[],dev_dep: boolean,pkg_json_path: string = "./package.json") {
   try {

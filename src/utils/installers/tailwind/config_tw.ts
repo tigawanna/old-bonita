@@ -5,6 +5,7 @@ import Spinnies from "spinnies";
 import { safeJSONParse } from "@/utils/helpers/json/json";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { IPackageJson } from "@/utils/helpers/pkg-manager/types";
+import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
 
 export async function addBaseTWcss(inde_styles_path: string) {
   try {
@@ -60,6 +61,21 @@ export async function getPkgJsonTailwindDeps() {
     });
 }
 
+
+export async function addTailwindDeps() {
+  const spinnies = new Spinnies();
+  try {
+    spinnies.add("fetching", { text: "adding tailwind deps" });
+    const pkg_json = await getPkgJson();
+    const deps_json = await getDepsJson();
+
+    
+    // await writeFile("./package.json", JSON.stringify({ name, version }, null, 2), "utf8");
+    spinnies.succeed("fetching");
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function tailwindInit(){
   const spinnies = new Spinnies()

@@ -27,7 +27,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "pretty": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
-    "release": "release-it"
+    "release": "release-it",
+    "updeps":"tsx src\\utils\\helpers\\pkg-manager\\updateDeps.ts"
   },
   "keywords": [
     "bonita",
