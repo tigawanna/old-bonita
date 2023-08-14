@@ -4,7 +4,7 @@ import {
   installPackages,
   packageExecCommand,
 } from "@/utils/helpers/package-managers";
-import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
+import { addBaseTWcss } from "@/utils/installers/tailwind/config_tw";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForPandaConfig } from "../../config/prompts/panda";
 import { z } from "zod";

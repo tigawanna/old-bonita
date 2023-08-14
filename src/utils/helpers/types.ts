@@ -8,6 +8,7 @@ export interface IPackageJson {
   scripts: KeyStringObject;
   dependencies: KeyStringObject;
   devDependencies: KeyStringObject;
+  workspaces?: string[];
   [key: string]: any | undefined;
 }
 

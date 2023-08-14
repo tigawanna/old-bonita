@@ -6,7 +6,7 @@ import {
   packageExecCommand,
 } from "@/utils/helpers/package-managers";
 
-import { addBaseTWcss } from "@/utils/installers/tailwind/addBaseCss";
+import { addBaseTWcss, tailwindInit } from "@/utils/installers/tailwind/config_tw";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import {
   updateTwPlugins,
@@ -19,6 +19,7 @@ import { printHelpers } from "@/utils/helpers/print-tools";
 import { writeFile } from "fs/promises";
 import Spinnies from "spinnies";
 import { boolean } from "prask";
+import { addDepsToPackageJsons } from "@/utils/helpers/pkg-json";
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -124,8 +125,10 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       );
       // process.exit(1);
     }
-    await installPackages(["-D", ...packages, ...tw_plugins]);
-    await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
+    // await installPackages(["-D", ...packages, ...tw_plugins]);
+    await addDepsToPackageJsons([...packages, ...tw_plugins],true)
+    // await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
+    await tailwindInit()
 
     // tailwind_spinners.succeed("main");
   } catch (error: any) {
