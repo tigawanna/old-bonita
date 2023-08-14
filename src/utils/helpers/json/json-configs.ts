@@ -1,8 +1,8 @@
 import { readFile, writeFile } from "fs/promises";
 import { safeJSONParse } from "./json";
-import { ITSConfigMini } from "../types";
+import { ITSConfigMini } from "../pkg-manager/types";
 import Spinnies from "spinnies";
-import { execPackageManagerCommand } from "../package-managers";
+import { execPackageManagerCommand } from "../pkg-manager/package-managers";
 
 export async function addTsconfigPathAlias() {
   const ts_config_aliases = new Spinnies();

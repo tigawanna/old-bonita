@@ -5,7 +5,7 @@ import { cloneRepository } from "@/utils/helpers/repos/get-repo";
 import { mergeOrCreateDirs } from "@/utils/helpers/fs/directories";
 import { writeOrOverWriteFile } from "@/utils/helpers/fs/files";
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import { IPackageJson } from "@/utils/helpers/types";
+import { IPackageJson } from "@/utils/helpers/pkg-manager/types";
 import { merge } from "remeda";
 import { safeJSONParse } from "@/utils/helpers/json/json";
 import Spinnies from "spinnies";

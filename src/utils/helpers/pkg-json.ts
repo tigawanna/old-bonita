@@ -1,5 +1,5 @@
 import { readFile } from "fs/promises";
-import { IPackageJson } from "./types";
+import { IPackageJson } from "./pkg-manager/types";
 import { safeJSONParse } from "./json/json";
 
 
@@ -34,3 +34,5 @@ console.log("new package json ==",pkg_json);
 
   }
 }
+
+

@@ -4,7 +4,7 @@ import { promptForTanstackConfig } from "../../../config/prompts/vite-tanstack";
 import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
 import { removeDirectory } from "@/utils/helpers/fs/directories";
-import { installPackages } from "@/utils/helpers/package-managers";
+import { installPackages } from "@/utils/helpers/pkg-manager/package-managers";
 import { boolean } from "prask";
 
 // Define the tailwind schema

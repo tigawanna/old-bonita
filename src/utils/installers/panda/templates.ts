@@ -1,5 +1,5 @@
 import { readFile } from "fs";
-import { IPackageJson } from "@/utils/helpers/types";
+import { IPackageJson } from "@/utils/helpers/pkg-manager/types";
 import { writeFile } from "fs/promises";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { safeJSONParse } from "@/utils/helpers/json/json";

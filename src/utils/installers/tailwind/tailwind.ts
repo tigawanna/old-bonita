@@ -1,11 +1,5 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import {
-  execPackageManagerCommand,
-  getPackageManager,
-  installPackages,
-  packageExecCommand,
-} from "@/utils/helpers/package-managers";
-
+import { getPackageManager, packageExecCommand } from "@/utils/helpers/pkg-manager/package-managers";
 import { addBaseTWcss, tailwindInit } from "@/utils/installers/tailwind/config_tw";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import {

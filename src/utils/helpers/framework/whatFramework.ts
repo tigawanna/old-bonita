@@ -1,5 +1,5 @@
 import kleur from "kleur";
-import { IPackageJson } from "../types";
+import { IPackageJson } from "../pkg-manager/types";
 import { getPkgJson } from "../pkg-json";
 
 export const supportedFrameworks = [

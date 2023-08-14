@@ -1,6 +1,6 @@
 import { writeOrOverWriteFile } from "@/utils/helpers/fs/files";
 import { safeJSONParse } from "@/utils/helpers/json/json";
-import { IPackageJson } from "@/utils/helpers/types";
+import { IPackageJson } from "@/utils/helpers/pkg-manager/types";
 import { readFile, writeFile } from "fs/promises";
 import { merge } from "remeda";
 import Spinnies from "spinnies";

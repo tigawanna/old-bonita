@@ -1,7 +1,8 @@
 import { detect } from "@antfu/ni";
 import { execa } from "execa";
-import { printHelpers } from "./print-tools";
+import { printHelpers } from "../print-tools";
 import Spinnies from "spinnies";
+
 
 export async function getPackageManager(
   targetDir: string,
@@ -90,3 +91,7 @@ export async function execPackageManagerCommand(input: string[]) {
     process.exit(1);
   }
 }
+
+
+
+

@@ -4,7 +4,7 @@ import { postcss_templlate, tailwind_base_css, tailwind_config_template } from "
 import Spinnies from "spinnies";
 import { safeJSONParse } from "@/utils/helpers/json/json";
 import { printHelpers } from "@/utils/helpers/print-tools";
-import { IPackageJson } from "@/utils/helpers/types";
+import { IPackageJson } from "@/utils/helpers/pkg-manager/types";
 
 export async function addBaseTWcss(inde_styles_path: string) {
   try {
