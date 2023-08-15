@@ -6,6 +6,7 @@ import { safeJSONParse } from "@/utils/helpers/json/json";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import { IPackageJson } from "@/utils/helpers/pkg-manager/types";
 import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
+import { merge } from "remeda";
 
 export async function addBaseTWcss(inde_styles_path: string) {
   try {
@@ -67,7 +68,8 @@ export async function addTailwindDeps() {
   try {
     spinnies.add("fetching", { text: "adding tailwind deps" });
     const pkg_json = await getPkgJson();
-    const deps_json = await getDepsJson();
+    const tw_deps_json = await (await getDepsJson()).tailwind
+    const new_deps = merge(pkg_json.devDpendencies,tw_deps_json)
 
     
     // await writeFile("./package.json", JSON.stringify({ name, version }, null, 2), "utf8");
