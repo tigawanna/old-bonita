@@ -1,6 +1,6 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { getPackageManager, packageExecCommand } from "@/utils/helpers/pkg-manager/package-managers";
-import { addBaseTWcss, tailwindInit } from "@/utils/installers/tailwind/config_tw";
+import { addBaseTWcss, addTailwindDeps, tailwindInit } from "@/utils/installers/tailwind/config_tw";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import {
   updateTwPlugins,
@@ -14,6 +14,7 @@ import { writeFile } from "fs/promises";
 import Spinnies from "spinnies";
 import { boolean } from "prask";
 import { addDepsToPackageJsons } from "@/utils/helpers/pkg-json";
+import { promptToInstall } from "@/utils/helpers/propmt";
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -120,14 +121,18 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
       // process.exit(1);
     }
     // await installPackages(["-D", ...packages, ...tw_plugins]);
-    await addDepsToPackageJsons([...packages, ...tw_plugins],true)
+    // await addDepsToPackageJsons([...packages, ...tw_plugins],true)
     // await execPackageManagerCommand(["tailwindcss", "init", "-p"]);
+    await addTailwindDeps()
     await tailwindInit()
+    await promptToInstall()
+
 
     // tailwind_spinners.succeed("main");
   } catch (error: any) {
     // tailwind_spinners.fail("main");
     printHelpers.error("Error installing Tailwind  :\n" + error.message);
+    throw error;
     // process.exit(1);
   }
 }

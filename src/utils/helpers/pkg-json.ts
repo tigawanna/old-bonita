@@ -1,6 +1,8 @@
 import { readFile } from "fs/promises";
 import { IPackageJson } from "./pkg-manager/types";
 import { safeJSONParse } from "./json/json";
+import { DeepPartial } from "@/types";
+import { values } from "remeda";
 
 
 export async function getPkgJson(path: string = "./package.json"): Promise<IPackageJson> {
@@ -22,9 +24,99 @@ export async function getDepsJson(path: string = "./deps.json"){
     if (!pkg_json) {
       throw new Error("package.json not found");
     }
-    return safeJSONParse<typeof deps_json>(pkg_json);
+    return await safeJSONParse<typeof deps_json>(pkg_json);
   } catch (error) {
     throw new Error("error getting deps json");
+  }
+}
+
+type TGetDepsJsonReturn = Awaited<ReturnType<typeof getDepsJson>>
+
+
+export async function allDepsArray(){
+try {
+  const deps = await getDepsJson()
+   const all_deps = Object.entries(deps).reduce((acc, [key, value]) => {
+      const arr = Object.entries(value).flatMap(([key, value]) => {
+       return Object.keys(value)
+     })
+
+     return [...acc, ...arr]
+   },[""])
+   return all_deps
+} catch (error) {
+  
+}
+}
+
+export async function filterAndIncludeDeps(
+  dep_key: keyof TGetDepsJsonReturn["default"],
+  include_deps: DeepPartial<TGetDepsJsonReturn["default"]>) {
+  try {
+
+    const saved_deps = await getDepsJson()
+    const inner_dev_deps = include_deps[dep_key]?.dev
+    const dev_deps = Object.entries(saved_deps[dep_key].dev).reduce((acc, [key, value]) => {
+      // @ts-expect-error
+      if (inner_dev_deps?.[key]) {
+        // @ts-expect-error
+        acc[key] = value
+      }
+      return acc
+    }, {})
+    const inner_main_deps = include_deps[dep_key]?.main
+    const main_deps = Object.entries(saved_deps[dep_key].main).reduce((acc, [key, value]) => {
+      // @ts-expect-error
+      if (inner_main_deps?.[key]) {
+        // @ts-expect-error
+        acc[key] = value
+      }
+      return acc
+    }, {})
+
+    return {
+      dev:dev_deps,
+      main:main_deps
+    }
+
+  } catch (error: any) {
+    throw error
+  }
+}
+
+
+export async function filterAndIgnoreDeps(
+  dep_key: keyof TGetDepsJsonReturn["default"],
+  include_deps: DeepPartial<TGetDepsJsonReturn["default"]>){
+  try {
+
+    const saved_deps = await getDepsJson()
+    const inner_dev_deps = include_deps[dep_key]?.dev
+    const dev_deps = Object.entries(saved_deps[dep_key].dev).reduce((acc, [key, value]) => {
+      // @ts-expect-error
+      if(!inner_dev_deps?.[key]){
+        // @ts-expect-error
+        acc[key] = value
+      }
+      return acc
+    },{})
+    const inner_main_deps = include_deps[dep_key]?.main
+    const main_deps = Object.entries(saved_deps[dep_key].main).reduce((acc, [key, value]) => {
+      // @ts-expect-error
+      if(!inner_main_deps?.[key]){
+        // @ts-expect-error
+        acc[key] = value
+      }
+      return acc
+    },{})
+
+    return {
+      dev:dev_deps,
+      main:main_deps
+    }
+    
+  } catch (error:any) {
+    throw error
   }
 }
 

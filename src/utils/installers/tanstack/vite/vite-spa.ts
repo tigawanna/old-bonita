@@ -6,6 +6,11 @@ import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
 import { removeDirectory } from "@/utils/helpers/fs/directories";
 import { installPackages } from "@/utils/helpers/pkg-manager/package-managers";
 import { boolean } from "prask";
+import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
+import { writeFile } from "fs-extra";
+import { merge } from "remeda";
+import Spinnies from "spinnies";
+import { promptToInstall } from "@/utils/helpers/propmt";
 
 // Define the tailwind schema
 export const tanstackViteReactSchema = z.object({
@@ -35,8 +40,30 @@ export async function addTanstackToVite(bonita_config: TBonitaConfigSchema) {
     await setUpRouterTemplate(config);
     await addViteTSPathAlias();
     await removeDirectory("./temp");
-    await installPackages([""]);
+    await addTanstackViteReactDeps()
+    await promptToInstall()
+   
   } catch (error: any) {
-    process.exit(1);
+    // process.exit(1);
+    throw error
+  }
+}
+
+
+export async function addTanstackViteReactDeps() {
+  const spinnies = new Spinnies();
+  try {
+    spinnies.add("fetching", { text: "adding tanstack deps" });
+    const pkg_json = await getPkgJson();
+    const tan_deps_json = await (await getDepsJson()).tanstack
+    const new_deps = merge(pkg_json.dependencies, tan_deps_json.main)
+    const new_dev_deps = merge(pkg_json.devDependencies, tan_deps_json.dev)
+    pkg_json.dependencies = new_deps;
+    pkg_json.devDependencies = new_dev_deps
+
+    await writeFile("./package.json", JSON.stringify(pkg_json, null, 2), "utf8");
+    spinnies.succeed("fetching");
+  } catch (error) {
+    throw error;
   }
 }

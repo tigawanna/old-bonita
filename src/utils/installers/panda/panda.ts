@@ -13,6 +13,7 @@ import { printHelpers } from "@/utils/helpers/print-tools";
 import Spinnies from "spinnies";
 import { boolean } from "prask";
 import { addBasePandacss, addPandaDeps } from "./config_panda";
+import { promptToInstall } from "@/utils/helpers/propmt";
 
 // Define the tailwind schema
 export const pandaSchema = z.object({
@@ -97,10 +98,12 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
       // process.exit(1);
     }
     await addPandaDeps()
-    // await installPackages(["-D", "@pandacss/dev"]);
+    await promptToInstall()
+
 
   } catch (error: any) {
       printHelpers.error("Error installing pandacss  :\n" + error.message);
+      throw error;
     // process.exit(1);
   }
 }
