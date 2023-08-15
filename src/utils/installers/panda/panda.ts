@@ -1,10 +1,5 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import {
-  getPackageManager,
-  installPackages,
-  packageExecCommand,
-} from "@/utils/helpers/pkg-manager/package-managers";
-import { addBaseTWcss } from "@/utils/installers/tailwind/config_tw";
+import { getPackageManager, packageExecCommand } from "@/utils/helpers/pkg-manager/package-managers";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForPandaConfig } from "../../config/prompts/panda";
 import { z } from "zod";
@@ -17,6 +12,7 @@ import { writeFile } from "fs/promises";
 import { printHelpers } from "@/utils/helpers/print-tools";
 import Spinnies from "spinnies";
 import { boolean } from "prask";
+import { addBasePandacss, addPandaDeps } from "./config_panda";
 
 // Define the tailwind schema
 export const pandaSchema = z.object({
@@ -26,6 +22,7 @@ export const pandaSchema = z.object({
 export type TPandaConfigSchema = z.infer<typeof pandaSchema>;
 
 export async function installPanda(bonita_config: TBonitaConfigSchema) {
+
   try {
     const config = await promptForPandaConfig(bonita_config);
     const root_styles = validateRelativePath(config.root_styles);
@@ -74,7 +71,7 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
     const panda_base_spinners = new Spinnies();
     panda_base_spinners.add("base-styles", { text: "adding base styles" });
 
-    await addBaseTWcss(root_styles)
+    await addBasePandacss(root_styles)
       .then((res) => {
         panda_base_spinners.succeed("base-styles");
         return res;
@@ -94,17 +91,16 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
 
     if (!consent) {
       const package_manager = await getPackageManager(".");
-      const install_command =
-        packageExecCommand(package_manager) + " -D @pandacss/dev";
+      const install_command = packageExecCommand(package_manager) + " -D @pandacss/dev";
       printHelpers.info("install them manually by running");
       printHelpers.info(install_command);
       // process.exit(1);
     }
-    await installPackages(["-D", "@pandacss/dev"]);
-    // panda_spinners.succeed("main");
+    await addPandaDeps()
+    // await installPackages(["-D", "@pandacss/dev"]);
+
   } catch (error: any) {
-    // panda_spinners.fail("main");
-    printHelpers.error("Error installing pandacss  :\n" + error.message);
+      printHelpers.error("Error installing pandacss  :\n" + error.message);
     // process.exit(1);
   }
 }

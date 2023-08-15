@@ -1,6 +1,9 @@
 import { existsSync } from "fs";
 import { readFile, writeFile } from "fs/promises";
 import { panda_base_css } from "./templates";
+import Spinnies from "spinnies";
+import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
+import { merge } from "remeda";
 
 export async function addBasePandacss(inde_styles_path: string) {
   try {
@@ -21,6 +24,25 @@ export async function addBasePandacss(inde_styles_path: string) {
     }
     return;
   } catch (error) {
+    throw error;
+  }
+}
+
+export async function addPandaDeps() {
+  const spinnies = new Spinnies();
+  try {
+    spinnies.add("main", { text: "adding panda deps" });
+    const pkg_json = await getPkgJson();
+    const tw_deps_json = await (await getDepsJson()).panda
+    const new_deps = merge(pkg_json.dependencies, tw_deps_json.main)
+    const new_dev_deps = merge(pkg_json.devDependencies, tw_deps_json.dev)
+    pkg_json.dependencies = new_deps;
+    pkg_json.devDependencies = new_dev_deps
+
+    await writeFile("./package.json", JSON.stringify(pkg_json, null, 2), "utf8");
+    spinnies.succeed("main");
+  } catch (error:any) {
+    spinnies.fail("main",{ text: error.message });
     throw error;
   }
 }

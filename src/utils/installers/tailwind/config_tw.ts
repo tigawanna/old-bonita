@@ -69,10 +69,12 @@ export async function addTailwindDeps() {
     spinnies.add("fetching", { text: "adding tailwind deps" });
     const pkg_json = await getPkgJson();
     const tw_deps_json = await (await getDepsJson()).tailwind
-    const new_deps = merge(pkg_json.devDpendencies,tw_deps_json)
-
+    const new_deps = merge(pkg_json.dependencies,tw_deps_json.main)
+    const new_dev_deps = merge(pkg_json.devDependencies,tw_deps_json.dev)
+    pkg_json.dependencies = new_deps;
+    pkg_json.devDependencies = new_dev_deps
     
-    // await writeFile("./package.json", JSON.stringify({ name, version }, null, 2), "utf8");
+    await writeFile("./package.json", JSON.stringify(pkg_json, null, 2), "utf8");
     spinnies.succeed("fetching");
   } catch (error) {
     throw error;
