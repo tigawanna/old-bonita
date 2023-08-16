@@ -46,8 +46,8 @@ export async function installPackages(packages: string[]) {
     installing_pkgs_spinners.add("main", {
       text: packageManager + " install " + " " + packages.join(" "),
     });
-
-    await execa(packageManager, ["install", ...packages])
+    const install_package_list = packages.join(" ") === "" ? ["install"] : ["install", ...packages]
+    await execa(packageManager, install_package_list)
       .then((res) => {
         installing_pkgs_spinners.succeed("main");
         printHelpers.info(res.command);
@@ -55,10 +55,11 @@ export async function installPackages(packages: string[]) {
       })
       .catch((error) => {
         installing_pkgs_spinners.fail("main", { text: error.message });
-        process.exit(1);
+        // process.exit(1);
+        throw new Error("error installing "+error.message);
       });
-  } catch (error) {
-    process.exit(1);
+  } catch (error:any) {
+    throw new Error("error installing " + error.message);
   }
 }
 /**
