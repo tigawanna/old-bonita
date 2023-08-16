@@ -12,6 +12,7 @@ export async function addNewPage(
       const config = await promptForTanstackConfig(bonita_config);
       await addNewtanstackPage(page, config);
     }
+    printHelpers.warning(bonita_config.framework+"  not yet supported");
   } catch (error: any) {
     printHelpers.error("error creating file " + error.message);
     throw error;
