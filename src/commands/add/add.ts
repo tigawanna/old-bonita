@@ -2,7 +2,7 @@ import { TBonitaConfigSchema, getBonitaConfig } from "@/utils/config/config";
 import { Command } from "commander";
 import { installTailwind } from "../../utils/installers/tailwind/tailwind";
 import { installPanda } from "@/utils/installers/panda/panda";
-import { TAddArgs, add_command_args } from "./args";
+import { TAddArgs, TAddOptions, add_command_args, add_command_options } from "./args";
 import { installTanstack } from "@/utils/installers/tanstack/tanstack";
 import { multiselect } from "prask";
 import { promptToInstall } from "@/utils/helpers/propmt";
@@ -12,13 +12,15 @@ export const addCommand = program
   .command("add")
   .description("add packages to your project")
   .argument("[inputs...]", "string to split")
-  .action(async (args) => {
+  .option('-y, --yes', 'Accept all defaults', false)
+  .action(async (args,options) => {
     const config = await getBonitaConfig();
 
     if (args.length === 0) {
-      return listAddablePackages(config);
+      return listAddablePackages(config,options);
     }
     const packages = await add_command_args(args);
+    const parsed_options = await add_command_options(options);
 
     if (packages.includes("tailwind")) {
       await installTailwind(config);
@@ -29,10 +31,10 @@ export const addCommand = program
     if (packages.includes("tanstack")) {
       await installTanstack(config);
     }
-    await promptToInstall()
+    await promptToInstall(parsed_options)
   });
 
-export async function listAddablePackages(config: TBonitaConfigSchema) {
+export async function listAddablePackages(config: TBonitaConfigSchema,add_options?:TAddOptions) {
   const result = await multiselect<TAddArgs[number]>({
     /* REQUIRED OPTIONS */
     message: "Which packages would you like to add?", // The message that the user will read
@@ -57,8 +59,8 @@ export async function listAddablePackages(config: TBonitaConfigSchema) {
       await installPanda(config);
     }
     if (packages.includes("tanstack")) {
-      await installTanstack(config);
+      await installTanstack(config,add_options);
     }
-    await promptToInstall()
+    await promptToInstall(add_options)
   }
 }

@@ -2,7 +2,7 @@ import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
 import { TTailwindConfigSchema } from "./tailwind";
 import { string, multiselect } from "prask";
 
-type NonNullableTailwindBonitaConfigSchema = Required<TBonitaConfigSchema>;
+
 export async function promptForTWConfig(config: TBonitaConfigSchema) {
   try {
     if (config && config.tailwind && "tw_config" in config.tailwind) {

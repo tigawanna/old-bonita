@@ -3,15 +3,16 @@ import { checkFramework } from "@/utils/helpers/framework/whatFramework";
 import { addTanstackToVite } from "./vite/vite-spa";
 import { addNextjsTanstack } from "./nextjs/next";
 import { printHelpers } from "@/utils/helpers/print-tools";
+import { TPageOptions } from "@/commands/page/args";
 
-export async function installTanstack(config: TBonitaConfigSchema) {
+export async function installTanstack(config: TBonitaConfigSchema,options?:TPageOptions) {
   try {
     const framework = await checkFramework();
     if (framework === "React+Vite") {
-      addTanstackToVite(config);
+      addTanstackToVite(config,options);
     }
     if (framework === "Nextjs") {
-      addNextjsTanstack(config);
+      addNextjsTanstack(config,options);
     }
   } catch (error: any) {
     // process.exit(1);

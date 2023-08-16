@@ -24,9 +24,12 @@ program.addCommand(pageCommand);
 program.command('404', { isDefault: true })
     .description("catch all command")
     .argument('[args...]', 'Catch all arguments/flags provided.')
+
     .allowUnknownOption()
-    .action((_) => {
+    .action(() => {
         // // maybe show help as fallback.
+        // console.log("args",args)
+        // console.log("options ",options)
         program.help();
         // console.log("catch all command ", args)
     });

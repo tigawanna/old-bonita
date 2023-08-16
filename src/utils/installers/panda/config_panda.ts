@@ -31,6 +31,7 @@ export async function addBasePandacss(inde_styles_path: string) {
       panda_base_spinners.succeed("base-styles",{ text: "updated base styles " });
       return writeFile(inde_styles_path, new_index_css);
     }
+    panda_base_spinners.succeed("base-styles", { text: "updated base styles " });
     return;
   } catch (error:any) {
     panda_base_spinners.fail("base-styles", { text: error.message });

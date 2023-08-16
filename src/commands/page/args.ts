@@ -13,3 +13,18 @@ export async function page_command_args(args: any) {
     process.exit(1);
   }
 }
+
+const pageOptionsShema = z.object({
+  yes: z.boolean().default(false),
+});
+export type TPageOptions = z.infer<typeof pageOptionsShema>;
+export async function page_command_options(options: any) {
+  try {
+    const parsed_options = await pageOptionsShema.parse(options);
+    return parsed_options;
+  } catch (error: any) {
+    printHelpers.error("invalid arguments: " + error.message);
+    return
+    // process.exit(1);
+  }
+}

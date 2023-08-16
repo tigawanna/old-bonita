@@ -44,34 +44,8 @@ export async function getViteConfig() {
       return "no vite config file found, added a generic one in vite.config.ts";
     }
     const vite_config_mod = await loadFile(vite_config_file_path);
-    // const { code:before } = generateCode(vite_config_mod);
-    // // printHelpers.info("mod before",before);
-
-    // for (let i = 0; i >= vite_config_mod.imports.$items.length; i++) {
-    //   if (vite_config_mod.imports.$items[i].from === "vite-tsconfig-paths") {
-    //     vite_config_mod.imports.$items.splice(i, 1);
-    //     }
-    // }
-    //   vite_config_mod.imports.$add({
-    //     from: "vite-tsconfig-paths",
-    //     imported: "default",
-    //     local: "tsconfigPaths",
-    // })
-    // vite_config_mod.imports.$items.forEach((item) => {
-    //   printHelpers.success("item \n" + JSON.stringify(item, null, 2));
-    //   // if (item.from === "vite-tsconfig-paths") {
-    //   //   item.imported = "default";
-    //   //   item.local = "tsconfigPaths";
-    //   // }
-    // })
-
-    // printHelpers.info("MOD \n"+JSON.stringify(vite_config_mod.imports, null, 2));
     const { code } = generateCode(vite_config_mod);
     printHelpers.info("mod", code);
-
-    // const { code } = generateCode(vite_config_mod);
-
-    // printHelpers.info("vite config mod", code);
   } catch (err: any) {
     throw err;
   }
@@ -143,6 +117,7 @@ export async function addViteTSPathAlias() {
       vite_aliases.succeed("main");
       return "vite-tsconfig-paths added";
     }
+
   } catch (error: any) {
     vite_aliases.fail("main", { text: error.message });
     throw error;

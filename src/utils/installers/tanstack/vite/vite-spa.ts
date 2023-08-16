@@ -9,6 +9,7 @@ import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
 import { writeFile } from "fs/promises";
+import { TPageOptions } from "@/commands/page/args";
 
 // Define the tailwind schema
 export const tanstackViteReactSchema = z.object({
@@ -22,10 +23,11 @@ export type TTanstckViteReactConfigSchema = z.infer<
   typeof tanstackViteReactSchema
 >;
 
-export async function addTanstackToVite(bonita_config: TBonitaConfigSchema) {
+export async function addTanstackToVite(bonita_config: TBonitaConfigSchema,options?:TPageOptions) {
   try {
     //  install dependencies
     const config = await promptForTanstackConfig(bonita_config);
+    if(!options?.yes){
     const consent = await boolean({
       message: `This will overwrite ${JSON.stringify(
         bonita_config.vite_tanstack,
@@ -33,8 +35,9 @@ export async function addTanstackToVite(bonita_config: TBonitaConfigSchema) {
       initial: true,
     });
     if (!consent) {
-      process.exit(1);
+     return
     }
+  }
     await setUpRouterTemplate(config);
     await addViteTSPathAlias();
     await removeDirectory("./temp");
@@ -43,7 +46,7 @@ export async function addTanstackToVite(bonita_config: TBonitaConfigSchema) {
    
   } catch (error: any) {
     // process.exit(1);
-    throw error
+    throw new Error("error adding tanstack to vite "+error.message);
   }
 }
 
@@ -61,7 +64,8 @@ export async function addTanstackViteReactDeps() {
 
     await writeFile("./package.json", JSON.stringify(pkg_json, null, 2), "utf8");
     spinnies.succeed("fetching");
-  } catch (error) {
+  } catch (error:any) {
+    spinnies.fail("fetching", { text: error.message });
     throw error;
   }
 }

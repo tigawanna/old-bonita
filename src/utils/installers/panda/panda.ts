@@ -1,19 +1,10 @@
 import { TBonitaConfigSchema } from "@/utils/config/config";
-import { getPackageManager, packageExecCommand } from "@/utils/helpers/pkg-manager/package-managers";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForPandaConfig } from "../../config/prompts/panda";
 import { z } from "zod";
-import {
-  addPandaScript,
-  panda_base_css,
-  panda_config_template,
-} from "./templates";
-import { writeFile } from "fs/promises";
 import { printHelpers } from "@/utils/helpers/print-tools";
-import Spinnies from "spinnies";
-import { boolean } from "prask";
 import { addBasePandacss, addPandaDeps, pandaInit } from "./config_panda";
-import { promptToInstall } from "@/utils/helpers/propmt";
+
 
 // Define the tailwind schema
 export const pandaSchema = z.object({

@@ -49,7 +49,7 @@ export async function removeDirectory(directoryPath: string) {
       });
       throw error;
     }
-    throw error;
+  
   }
 }
 

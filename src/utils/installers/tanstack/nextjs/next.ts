@@ -5,10 +5,11 @@ import {
   updateNextJsfilesWithTemplates,
 } from "./remote-templates";
 import { boolean } from "prask";
-import { getPkgJson, getDepsJson, filterAndIncludeDeps } from "@/utils/helpers/pkg-json";
+import { getPkgJson, filterAndIncludeDeps } from "@/utils/helpers/pkg-json";
 import { writeFile } from "fs/promises";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
+import { TPageOptions } from "@/commands/page/args";
 
 export const nextjsReactSchema = z.object({
   src_dir: z.boolean().default(true),
@@ -16,8 +17,9 @@ export const nextjsReactSchema = z.object({
 
 export type TNextjsReactConfigSchema = z.infer<typeof nextjsReactSchema>;
 
-export async function addNextjsTanstack(bonita_config: TBonitaConfigSchema) {
+export async function addNextjsTanstack(bonita_config: TBonitaConfigSchema,options?:TPageOptions) {
   try {
+    if(!options?.yes){
     const consent = await boolean({
       message:
         "This will overwrite sapp/page.tsx and app/layout.tsx. Do you want to continue?",
@@ -27,6 +29,7 @@ export async function addNextjsTanstack(bonita_config: TBonitaConfigSchema) {
       // process.exit(1);
       return
     }
+  }
     const templates = await fetchNextjsTanstackTemplates();
     await updateNextJsfilesWithTemplates(templates, bonita_config);
     await addtanstackNextDeps();

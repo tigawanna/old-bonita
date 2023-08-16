@@ -48,7 +48,11 @@ export async function addBaseTWcss(inde_styles_path: string) {
       return;
     }
     const new_base_css = tailwind_base_css + index_css;
-    return writeFile(inde_styles_path, new_base_css);
+    writeFile(inde_styles_path, new_base_css);
+    tailwind_base_css_spinners.succeed("base-styles", {
+      text: "updated base css directives",
+    });
+    
   } catch (error:any) {
     tailwind_base_css_spinners.fail("base-styles", {
       text: error.message,

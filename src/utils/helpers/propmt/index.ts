@@ -1,22 +1,23 @@
 import { boolean } from "prask";
-import Spinnies from "spinnies";
 import { installPackages } from "../pkg-manager/package-managers";
+import { TAddOptions } from "@/commands/add/args";
 
-export async function promptToInstall(){
-    const spinnies = new Spinnies()
+export async function promptToInstall(options?:TAddOptions){
+
 try {
-    const consent = await boolean({
-        message: "Do you want to install the dependencies now ?",
-        initial: true,
-    })??true
-    if (!consent) {
-        return
+    if(!options?.yes){
+        const consent = await boolean({
+            message: "Do you want to install the dependencies now ?",
+            initial: true,
+        })??true
+        if (!consent) {
+            return
+        }
     }
-    spinnies.add("fetching", { text: "installing dependencies" })
+  
     await installPackages([""]);
-    spinnies.succeed("fetching")
+
 } catch (error:any) {
-    spinnies.fail("fetching", { text: error.message })
     return
 }
 }

@@ -9,6 +9,7 @@ export const pageCommand = program
   .command("page")
   .description("add new pages to your project")
   .argument("[inputs...]", "pages and options")
+  .option('-y, --yes', 'Accept all defaults', false)
   .action(async (args) => {
     const config = await getBonitaConfig();
     const parsed_args = await page_command_args(args);
