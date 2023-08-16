@@ -8,7 +8,6 @@ import { boolean } from "prask";
 import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
-import { promptToInstall } from "@/utils/helpers/propmt";
 import { writeFile } from "fs/promises";
 
 // Define the tailwind schema
@@ -40,7 +39,7 @@ export async function addTanstackToVite(bonita_config: TBonitaConfigSchema) {
     await addViteTSPathAlias();
     await removeDirectory("./temp");
     await addTanstackViteReactDeps()
-    await promptToInstall()
+
    
   } catch (error: any) {
     // process.exit(1);

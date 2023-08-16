@@ -9,8 +9,6 @@ import { getPkgJson, getDepsJson, filterAndIncludeDeps } from "@/utils/helpers/p
 import { writeFile } from "fs/promises";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
-import { promptToInstall } from "@/utils/helpers/propmt";
-
 
 export const nextjsReactSchema = z.object({
   src_dir: z.boolean().default(true),
@@ -32,7 +30,7 @@ export async function addNextjsTanstack(bonita_config: TBonitaConfigSchema) {
     const templates = await fetchNextjsTanstackTemplates();
     await updateNextJsfilesWithTemplates(templates, bonita_config);
     await addtanstackNextDeps();
-    await promptToInstall()
+
   } catch (error: any) {
     // process.exit(1);
     throw error

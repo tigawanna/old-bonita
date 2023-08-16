@@ -31,9 +31,6 @@ export async function installPanda(bonita_config: TBonitaConfigSchema) {
     await pandaInit(bonita_config)
     await addBasePandacss(root_styles)
     await addPandaDeps()
-    await promptToInstall()
-
-
   } catch (error: any) {
       printHelpers.error("Error installing pandacss  :\n" + error.message);
       // throw error;

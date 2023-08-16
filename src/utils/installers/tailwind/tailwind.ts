@@ -4,7 +4,7 @@ import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForTWConfig } from "./prompts";
 import { z } from "zod";
 import { printHelpers } from "@/utils/helpers/print-tools";
-import { promptToInstall } from "@/utils/helpers/propmt";
+
 
 // Define the tailwind schema
 export const tailwindSchema = z.object({
@@ -21,7 +21,7 @@ export async function installTailwind(bonita_config: TBonitaConfigSchema) {
     await addBaseTWcss(root_styles)
     await tailwindInit(bonita_config)
     await addTailwindDeps()
-    await promptToInstall()
+ 
     } catch (error: any) {
     // tailwind_spinners.fail("main");
     printHelpers.error("Error installing Tailwind  :\n" + error.message);

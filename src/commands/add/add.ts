@@ -5,6 +5,7 @@ import { installPanda } from "@/utils/installers/panda/panda";
 import { TAddArgs, add_command_args } from "./args";
 import { installTanstack } from "@/utils/installers/tanstack/tanstack";
 import { multiselect } from "prask";
+import { promptToInstall } from "@/utils/helpers/propmt";
 const program = new Command();
 
 export const addCommand = program
@@ -28,6 +29,7 @@ export const addCommand = program
     if (packages.includes("tanstack")) {
       await installTanstack(config);
     }
+    await promptToInstall()
   });
 
 export async function listAddablePackages(config: TBonitaConfigSchema) {
@@ -57,5 +59,6 @@ export async function listAddablePackages(config: TBonitaConfigSchema) {
     if (packages.includes("tanstack")) {
       await installTanstack(config);
     }
+    await promptToInstall()
   }
 }
