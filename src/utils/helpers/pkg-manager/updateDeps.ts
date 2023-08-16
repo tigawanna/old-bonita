@@ -116,7 +116,7 @@ export async function dependancyType(
  *
  * @return {Promise<object>} The updated dependencies.
  */
-export async function updateDependancies() {
+export async function updateDependencies() {
   const spinnies = new Spinnies();
   try {
     spinnies.add("main", { text: "checking latest deps" });
@@ -146,7 +146,7 @@ export async function updateDependancies() {
   }
 }
 
-updateDependancies()
+updateDependencies()
   .then((data) => {
     console.log("update deps retirn type", data);
   })

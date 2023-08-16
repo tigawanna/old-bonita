@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { IPackageJson } from "./pkg-manager/types";
 import { safeJSONParse } from "./json/json";
 import { DeepPartial } from "@/types";
-import { values } from "remeda";
+
 
 
 export async function getPkgJson(path: string = "./package.json"): Promise<IPackageJson> {
@@ -17,16 +17,12 @@ export async function getPkgJson(path: string = "./package.json"): Promise<IPack
     throw new Error("error getting package json");
   }
 }
-export async function getDepsJson(path: string = "./deps.json"){
+export async function getDepsJson(){
   try {
-    const deps_json = await import ("../../../deps.json");
-    const pkg_json = await readFile(path, "utf-8");
-    if (!pkg_json) {
-      throw new Error("package.json not found");
-    }
-    return await safeJSONParse<typeof deps_json>(pkg_json);
-  } catch (error) {
-    throw new Error("error getting deps json");
+    const deps_json = await import ("../../../deps.json")
+    return deps_json
+  } catch (error:any) {
+   throw new Error("deps json error :"+ error.message);
   }
 }
 
@@ -36,8 +32,8 @@ type TGetDepsJsonReturn = Awaited<ReturnType<typeof getDepsJson>>
 export async function allDepsArray(){
 try {
   const deps = await getDepsJson()
-   const all_deps = Object.entries(deps).reduce((acc, [key, value]) => {
-      const arr = Object.entries(value).flatMap(([key, value]) => {
+   const all_deps = Object.entries(deps).reduce((acc, [_, value]) => {
+      const arr = Object.entries(value).flatMap(([__, value]) => {
        return Object.keys(value)
      })
 

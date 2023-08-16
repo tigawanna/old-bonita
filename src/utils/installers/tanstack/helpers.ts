@@ -88,7 +88,7 @@ export async function mergePackageJSON() {
     );
     const new_pkg_json = {
       ...project_pkg_json,
-      dependancies: new_pkg_json_deps,
+      dependencies: new_pkg_json_deps,
       devDependencies: new_pkg_json_dev_deps,
     };
 

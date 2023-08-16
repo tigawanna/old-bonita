@@ -6,7 +6,7 @@ import {
 } from "./remote-templates";
 import { boolean } from "prask";
 import { getPkgJson, getDepsJson, filterAndIncludeDeps } from "@/utils/helpers/pkg-json";
-import { writeFile } from "fs-extra";
+import { writeFile } from "fs/promises";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
 import { promptToInstall } from "@/utils/helpers/propmt";

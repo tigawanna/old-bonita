@@ -4,13 +4,12 @@ import { promptForTanstackConfig } from "../../../config/prompts/vite-tanstack";
 import { setUpRouterTemplate } from "../helpers";
 import { addViteTSPathAlias } from "@/utils/helpers/config/vite";
 import { removeDirectory } from "@/utils/helpers/fs/directories";
-import { installPackages } from "@/utils/helpers/pkg-manager/package-managers";
 import { boolean } from "prask";
 import { getDepsJson, getPkgJson } from "@/utils/helpers/pkg-json";
-import { writeFile } from "fs-extra";
 import { merge } from "remeda";
 import Spinnies from "spinnies";
 import { promptToInstall } from "@/utils/helpers/propmt";
+import { writeFile } from "fs/promises";
 
 // Define the tailwind schema
 export const tanstackViteReactSchema = z.object({
@@ -26,7 +25,7 @@ export type TTanstckViteReactConfigSchema = z.infer<
 
 export async function addTanstackToVite(bonita_config: TBonitaConfigSchema) {
   try {
-    //  install dependancies
+    //  install dependencies
     const config = await promptForTanstackConfig(bonita_config);
     const consent = await boolean({
       message: `This will overwrite ${JSON.stringify(
@@ -55,7 +54,7 @@ export async function addTanstackViteReactDeps() {
   try {
     spinnies.add("fetching", { text: "adding tanstack deps" });
     const pkg_json = await getPkgJson();
-    const tan_deps_json = await (await getDepsJson()).tanstack
+    const tan_deps_json = (await getDepsJson()).tanstack
     const new_deps = merge(pkg_json.dependencies, tan_deps_json.main)
     const new_dev_deps = merge(pkg_json.devDependencies, tan_deps_json.dev)
     pkg_json.dependencies = new_deps;

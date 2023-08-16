@@ -1,7 +1,12 @@
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile,mkdir } from "fs/promises";
 import { printHelpers } from "../print-tools";
 import { existsSync } from "fs";
-import fsextra from "fs-extra";
+import path from "path";
+
+async function ensureFile(filePath:string) {
+  const dir = path.dirname(filePath);
+  await mkdir(dir, { recursive: true });
+}
 /**
  * Writes or overwrites a file with the given content.
  *
@@ -12,7 +17,7 @@ import fsextra from "fs-extra";
 export async function writeOrOverWriteFile(path: string, content: string) {
   try {
     if (!existsSync(path)) {
-      await fsextra.ensureFile(path);
+      await ensureFile(path);
       await writeFile(path, content).catch((error: any) => {
         printHelpers.error("error creating file " + error.message);
         throw error;
