@@ -34,7 +34,8 @@ export async function addTanstackToVite(bonita_config: TBonitaConfigSchema,optio
       )} Do you want to continue?`,
       initial: true,
     });
-    if (!consent) {
+// @ts-expect-error
+      if (!consent[0]) {
      return
     }
   }

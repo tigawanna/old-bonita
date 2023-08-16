@@ -2,6 +2,7 @@ import { boolean } from "prask";
 import { installPackages } from "../pkg-manager/package-managers";
 import { TAddOptions } from "@/commands/add/args";
 
+
 export async function promptToInstall(options?:TAddOptions){
 
 try {
@@ -9,8 +10,9 @@ try {
         const consent = await boolean({
             message: "Do you want to install the dependencies now ?",
             initial: true,
-        })??true
-        if (!consent) {
+        })
+        // @ts-expect-error
+        if (!consent[0]) {
             return
         }
     }

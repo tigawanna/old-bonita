@@ -96,7 +96,7 @@ export async function getPkgJsonTailwindDeps() {
 export async function addTailwindDeps() {
   const spinnies = new Spinnies();
   try {
-    spinnies.add("fetching", { text: "adding tailwind deps" });
+    spinnies.add("adding_deps", { text: "adding tailwind deps" });
     const pkg_json = await getPkgJson();
     const tw_deps_json = await (await getDepsJson()).tailwind
     const new_deps = merge(pkg_json.dependencies,tw_deps_json.main)
@@ -105,66 +105,61 @@ export async function addTailwindDeps() {
     pkg_json.devDependencies = new_dev_deps
     
     await writeFile("./package.json", JSON.stringify(pkg_json, null, 2), "utf8");
-    spinnies.succeed("fetching");
+    spinnies.succeed("adding_deps");
   } catch (error: any) {
-      // printHelpers.error("error adding tailwind deps \n"+error.message);
-     throw new Error("error adding tailwind deps \n"+error.message);
+    spinnies.fail("adding_deps",{ text: error.message });
+    throw new Error("error adding tailwind deps \n"+error.message);
   }
 }
 
 
 
-
-export async function tailwindInit(bonita_config:TBonitaConfigSchema){
+export async function addTailwindConfig(bonita_config: TBonitaConfigSchema){
   const tailwind_config_spinners = new Spinnies();
-  tailwind_config_spinners.add("config", {
-    text: "tailwind init",
-  });
-try {
+  try {
+  tailwind_config_spinners.add("tw_config", {text: "tailwind init"});
   const config = await promptForTWConfig(bonita_config);
   const tw_config_path = validateRelativePath(config.tailwind?.tw_config);
   const tw_plugins = config.tailwind?.tw_plugins;
-  // add plugins to tailwind.config
+
+
   if (tw_plugins && tw_plugins?.length > 0) {
     const tw_config_with_plugins = updateTwPlugins(tw_plugins);
-    await writeFile(tw_config_path ?? "tailwind.config.js",tw_config_with_plugins)
-      .then((res) => {
-        tailwind_config_spinners.succeed("config");
-        return res;
-      })
-      .catch((error) => {
-        tailwind_config_spinners.fail("config", { text: error.message });
-        printHelpers.error("Error adding tw config  :\n" + error.message);
-        printHelpers.info("try instalig them manually and try again");
-        printHelpers.info(tw_config_with_plugins);
-        throw error
-        // process.exit(1);
-      });
+    await writeFile(tw_config_path ?? "tailwind.config.js", tw_config_with_plugins)
+    tailwind_config_spinners.succeed("tw_config");
   } else {
-    await writeFile(tw_config_path ?? "tailwind.config.js",tailwind_config_template)
-      .then((res) => {
-        tailwind_config_spinners.succeed("config");
-        return res;
-      })
-      .catch((error) => {
-        tailwind_config_spinners.fail("config", { text: error.message });
-        printHelpers.error("Error adding tw config  :\n" + error.message);
-        printHelpers.info("try instalig them manually and try again");
-        printHelpers.info(tailwind_config_template);
-        throw error
-        // process.exit(1);
-      });
+    await writeFile(tw_config_path ?? "tailwind.config.js", tailwind_config_template)
+    tailwind_config_spinners.succeed("tw_config");
   }
-  // add postcss config
-  await writeFile("postcss.config.js", postcss_templlate).catch((error) => {
-    tailwind_config_spinners.fail("config", { text: error.message });
-    printHelpers.error("Error adding tw postcss config  :\n" + error.message);
-    printHelpers.info("try adding manually and try again");
-    printHelpers.info(postcss_templlate);
-    throw error
-  })
+ 
+  } catch (error:any) {
+  tailwind_config_spinners.fail("tw_config",{text: error.message});
+}
+}
+
+export async function addTailwindPostcssConfig() {
+  const tailwind_config_spinners = new Spinnies();
+  tailwind_config_spinners.add("postcss_config", { text: "adding postcss config"});
+try {
+  await writeFile("postcss.config.js", postcss_templlate)
+  tailwind_config_spinners.succeed("postcss_config");
+} catch (error:any) {
+  tailwind_config_spinners.fail("postcss_config", { text: error.message });
+  printHelpers.error("Error adding tw postcss config  :\n" + error.message);
+  printHelpers.info("try adding manually and try again");
+  printHelpers.info(postcss_templlate);
+  throw new Error("Error adding postcss.config :\n" + error.message)
+}
+}
+
+
+
+export async function tailwindInit(bonita_config:TBonitaConfigSchema){
+try {
+  await addTailwindConfig(bonita_config);
+  await addTailwindPostcssConfig();
+
 } catch (error: any) {
-  // printHelpers.error("Error running tailwind init :\n" + error.message);
-  throw new Error("Error running tailwind init :\n" + error.message)
+throw new Error("Error running tailwind init :\n" + error.message)
 }
 }

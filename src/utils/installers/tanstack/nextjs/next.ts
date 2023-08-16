@@ -25,7 +25,8 @@ export async function addNextjsTanstack(bonita_config: TBonitaConfigSchema,optio
         "This will overwrite sapp/page.tsx and app/layout.tsx. Do you want to continue?",
       initial: true,
     });
-    if (!consent) {
+    // @ts-expect-error
+      if (!!consent[0]) {
       // process.exit(1);
       return
     }

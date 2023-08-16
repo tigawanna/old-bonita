@@ -39,7 +39,8 @@ export async function addNewtanstackPage(
         message: "Do you want to overwrite it?",
         initial: true,
       });
-      if (!overwrite_consent) {
+      // @ts-expect-error
+      if (!overwrite_consent[0]) {
         process.exit(1);
       }
       await removeDirectory(dir_path);
