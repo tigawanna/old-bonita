@@ -10,6 +10,7 @@ import { merge } from "remeda";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { promptForTWConfig } from "./prompts";
+import { checkFramework, frameworkType } from "@/utils/helpers/framework/whatFramework";
 
 export async function addBaseTWcss(inde_styles_path: string) {
   const tailwind_base_css_spinners = new Spinnies();
@@ -95,8 +96,8 @@ export async function getPkgJsonTailwindDeps() {
 
 export async function addTailwindDeps() {
   const spinnies = new Spinnies();
+  spinnies.add("adding_deps", { text: "adding tailwind deps" });
   try {
-    spinnies.add("adding_deps", { text: "adding tailwind deps" });
     const pkg_json = await getPkgJson();
     const tw_deps_json = await (await getDepsJson()).tailwind
     const new_deps = merge(pkg_json.dependencies,tw_deps_json.main)
@@ -116,8 +117,8 @@ export async function addTailwindDeps() {
 
 export async function addTailwindConfig(bonita_config: TBonitaConfigSchema){
   const tailwind_config_spinners = new Spinnies();
-  try {
   tailwind_config_spinners.add("tw_config", {text: "tailwind init"});
+  try {
   const config = await promptForTWConfig(bonita_config);
   const tw_config_path = validateRelativePath(config.tailwind?.tw_config);
   const tw_plugins = config.tailwind?.tw_plugins;
@@ -126,14 +127,15 @@ export async function addTailwindConfig(bonita_config: TBonitaConfigSchema){
   if (tw_plugins && tw_plugins?.length > 0) {
     const tw_config_with_plugins = updateTwPlugins(tw_plugins);
     await writeFile(tw_config_path ?? "tailwind.config.js", tw_config_with_plugins)
-    tailwind_config_spinners.succeed("tw_config");
+    // tailwind_config_spinners.succeed("tw_config");
   } else {
     await writeFile(tw_config_path ?? "tailwind.config.js", tailwind_config_template)
+    // tailwind_config_spinners.succeed("tw_config");
+    }
     tailwind_config_spinners.succeed("tw_config");
-  }
- 
   } catch (error:any) {
   tailwind_config_spinners.fail("tw_config",{text: error.message});
+  throw new Error("Error adding tailwind config:\n" + error.message)
 }
 }
 
@@ -141,7 +143,8 @@ export async function addTailwindPostcssConfig() {
   const tailwind_config_spinners = new Spinnies();
   tailwind_config_spinners.add("postcss_config", { text: "adding postcss config"});
 try {
-  await writeFile("postcss.config.js", postcss_templlate)
+  const post_css_path = await checkFramework() ==="RedWood"?"postcss.config.mjs":"tailwind.config.js";
+  await writeFile(post_css_path, postcss_templlate)
   tailwind_config_spinners.succeed("postcss_config");
 } catch (error:any) {
   tailwind_config_spinners.fail("postcss_config", { text: error.message });
