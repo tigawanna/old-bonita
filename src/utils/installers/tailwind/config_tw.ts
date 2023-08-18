@@ -143,7 +143,7 @@ export async function addTailwindPostcssConfig() {
   const tailwind_config_spinners = new Spinnies();
   tailwind_config_spinners.add("postcss_config", { text: "adding postcss config"});
 try {
-  const post_css_path = await checkFramework() ==="RedWood"?"postcss.config.mjs":"tailwind.config.js";
+  const post_css_path = await checkFramework() === "RedWood" ? "postcss.config.mjs" :"postcss.config.js";
   await writeFile(post_css_path, postcss_templlate)
   tailwind_config_spinners.succeed("postcss_config");
 } catch (error:any) {

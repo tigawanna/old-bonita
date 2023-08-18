@@ -32,16 +32,7 @@ export default {
   },
 }`
 
-export const tw_deps = {
-  "@pandacss/dev": "^0.11.0",
-  "autoprefixer": "^10.4.14",
-  "daisyui": "^3.5.0",
-  "postcss": "^8.4.27",
-  "tailwind-scrollbar": "^3.0.4",
-  "tailwindcss": "^3.3.3",
-  "tailwindcss-animate": "^1.0.6",
-  "tailwindcss-elevation": "^2.0.0",
-}
+
 
 export function twPluginsTostring(plugins: string[]) {
   const tw_plugins = plugins.map((plugin) => {

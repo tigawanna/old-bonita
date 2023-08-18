@@ -18,7 +18,8 @@ export function frameworkType(pkg: IPackageJson): TFrameworkType {
     return "Nextjs";
   } else if (pkg.devDependencies?.vite && pkg.dependencies?.react) {
     return "React+Vite";
-  } else if (pkg.devDependencies?.["@redwoodjs/core"]) {
+  } else if (pkg.devDependencies?.["@redwoodjs/core"] || pkg.devDependencies?.["@redwoodjs/web"] 
+    || pkg.devDependencies?.["@redwoodjs/router"] || pkg.devDependencies?.["@redwoodjs/forms"]) {
     return "RedWood";
   }
   return "Others";
