@@ -10,7 +10,7 @@ import { merge } from "remeda";
 import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { TBonitaConfigSchema } from "@/utils/config/config";
 import { promptForTWConfig } from "./prompts";
-import { checkFramework, frameworkType } from "@/utils/helpers/framework/whatFramework";
+import { checkFramework } from "@/utils/helpers/framework/whatFramework";
 
 export async function addBaseTWcss(inde_styles_path: string) {
   const tailwind_base_css_spinners = new Spinnies();
@@ -100,6 +100,7 @@ export async function addTailwindDeps() {
   try {
     const pkg_json = await getPkgJson();
     const tw_deps_json = await (await getDepsJson()).tailwind
+    //  TODO: prompt user to pick deps 
     const new_deps = merge(pkg_json.dependencies,tw_deps_json.main)
     const new_dev_deps = merge(pkg_json.devDependencies,tw_deps_json.dev)
     pkg_json.dependencies = new_deps;
@@ -126,10 +127,10 @@ export async function addTailwindConfig(bonita_config: TBonitaConfigSchema){
 
   if (tw_plugins && tw_plugins?.length > 0) {
     const tw_config_with_plugins = updateTwPlugins(tw_plugins);
-    await writeFile(tw_config_path ?? "tailwind.config.js", tw_config_with_plugins)
+    await writeFile(tw_config_path, tw_config_with_plugins)
     // tailwind_config_spinners.succeed("tw_config");
   } else {
-    await writeFile(tw_config_path ?? "tailwind.config.js", tailwind_config_template)
+    await writeFile(tw_config_path, tailwind_config_template)
     // tailwind_config_spinners.succeed("tw_config");
     }
     tailwind_config_spinners.succeed("tw_config");

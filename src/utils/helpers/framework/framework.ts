@@ -10,6 +10,7 @@ const frames: TSupprtedFrameworks = "Nextjs";
 export function frameworkDefaults(framework: TSupprtedFrameworks) {
   if (framework === "Nextjs") {
     if (existsSync("./src")) {
+      //src app dir
       if (existsSync("./src/app/globals.css")) {
         return {
           root_dir: "./src/app",
@@ -23,10 +24,11 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
           },
         };
       }
-      if (existsSync("./src/pages/globals.css")) {
+      //src  pages dir
+      if (existsSync("./src/pages")&&existsSync("./src/styles/globals.css")) {
         return {
           root_dir: "./src/pages",
-          root_styles: "./src/pages/globals.css",
+          root_styles: "./src/styles/globals.css",
           state: "./src/state",
           components: "./src/components",
           framework: "Nextjs",
@@ -37,7 +39,8 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
         };
       }
     }
-    if (existsSync("./app/globals.css")) {
+    //no src app dir
+    if (existsSync("./app") &&existsSync("./app/globals.css")) {
       return {
         root_dir: "./app",
         root_styles: "./app/globals.css",
@@ -50,10 +53,11 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
         },
       };
     }
-    if (existsSync("./pages/globals.css")) {
+    //no src pages dir 
+    if (existsSync("./pages/styles/globals.css")) {
       return {
         root_dir: "./pages",
-        root_styles: "./pages/globals.css",
+        root_styles: "./pages/styles/globals.css",
         state: "./state",
         components: "./components",
         framework: "Nextjs",
@@ -63,10 +67,10 @@ export function frameworkDefaults(framework: TSupprtedFrameworks) {
         },
       };
     }
-
+    // default case
     return {
       root_dir: "./",
-      root_styles: "./globals.css",
+      root_styles: "./styles/globals.css",
       state: "./state",
       components: "./components",
       framework: "Nextjs",

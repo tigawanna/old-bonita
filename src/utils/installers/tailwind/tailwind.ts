@@ -4,7 +4,6 @@ import { validateRelativePath } from "@/utils/helpers/strings/general";
 import { promptForTWConfig } from "./prompts";
 import { z } from "zod";
 import { printHelpers } from "@/utils/helpers/print-tools";
-import { TAddOptions } from "@/commands/add/args";
 
 
 // Define the tailwind schema

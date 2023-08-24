@@ -1,6 +1,7 @@
 import { TBonitaConfigSchema, saveConfig } from "@/utils/config/config";
 import { TTailwindConfigSchema } from "./tailwind";
 import { string, multiselect } from "prask";
+import { existsSync } from "fs";
 
 
 export async function promptForTWConfig(config: TBonitaConfigSchema) {
@@ -18,7 +19,7 @@ export async function promptForTWConfig(config: TBonitaConfigSchema) {
       tw_config:
         (await string({
           message: "Where do you want to add your tailwind config file",
-          initial: "tailwind.config.js",
+          initial: existsSync("tailwind.config.ts")?"tailwind.config.ts":"tailwind.config.js",
         })) ?? "tailwind.config.js",
       tw_plugins: (await multiselect({
         message: "Want some plugins?",
